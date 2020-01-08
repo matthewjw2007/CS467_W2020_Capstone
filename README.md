@@ -8,7 +8,7 @@ The Neighborhood Cookbook is a web app that seeks to utilize a web scraping modu
 
 **NOTE: This repository requires Python 3 to run locally. [Go here](https://www.python.org/downloads/release/python-381/) if you need to install Python 3.**
 
-1. Clone the git repository into your locally directory of choice
+1. Clone the git repository into your local directory of choice
 2. Run `pip3 install -r requirements.txt` in terminal
 3. Run `python3 app.py` in terminal
 4. Navigate to the website through `http://127.0.0.1:8080` or `http://localhost:8080`
