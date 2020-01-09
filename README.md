@@ -10,8 +10,8 @@ The Neighborhood Cookbook is a web app that seeks to utilize a web scraping modu
 
 1. Clone the git repository into your local directory of choice
 2. Run `pip3 install -r requirements.txt` in terminal
-3. Run `python3 app.py` in terminal
-4. Navigate to the website through `http://127.0.0.1:8080` or `http://localhost:8080`
+3. Run `flask run` in terminal
+4. Navigate to the website through `http://127.0.0.1:5000` or `http://localhost:5000`
 
 ## Credits
 - [Matthew Esqueda](https://github.com/matthewjw2007)
