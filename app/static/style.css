@@ -1,0 +1,14 @@
+.outer-container{
+    margin:1em;
+    border: 2px solid black;
+    overflow: auto;
+    height: 100%;
+}
+
+.jumbotron {
+    padding: 0em;
+}
+
+.carousel-image {
+    max-height: 300px;
+}

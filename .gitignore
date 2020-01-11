@@ -1,5 +1,5 @@
 config.py
-.gitignore
 venv/
 __pycache__
 .idea/
+app/.DS_Store

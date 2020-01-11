@@ -13,20 +13,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Features</a>
-                <a class="nav-item nav-link" href="#">Pricing</a>
-                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+    <div class="outer-container">
+        <div class="jumbotron">
+            <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-interval="6000">
+                        <img src="../static/imgs/robin-stickel-tzl1UCXg5Es-unsplash.jpg" class="d-block w-100 carousel-image" alt="...">
+                    </div>
+                    <div class="carousel-item" data-interval="6000">
+                        <img src="../static/imgs/calum-lewis-vA1L1jRTM70-unsplash.jpg" class="d-block w-100 carousel-image" alt="...">
+                    </div>
+                    <div class="carousel-item" data-interval="6000">
+                        <img src="../static/imgs/zahrin-lukman-FYc-qfATAk4-unsplash.jpg" class="d-block w-100 carousel-image" alt="...">
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
 
     <!--Bootstrap JQuery-->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
