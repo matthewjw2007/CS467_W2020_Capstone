@@ -32,8 +32,8 @@
         </div>
         <!--Jumbotron end-->
         <!--Navbar start-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -56,10 +56,13 @@
                     </li>
                 </ul>
                 <span class="navbar-text">
-                    Login/Logout area
+                    {% if current_user.is_anonymous %}
+                    <a class="nav-link" href="#">Register</a>
+                    {% else %}
+                    <a class="nav-link" href="#">Log Out</a><i class="fas fa-user-minus"></i>
+                    {% endif %}
                 </span>
             </div>
-
         </nav>
         <!--Navbar end-->
     </div>
@@ -74,5 +77,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/4e0dd0a3a0.js" crossorigin="anonymous"></script>
 </body>
 </html>
