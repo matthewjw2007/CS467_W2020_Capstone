@@ -14,6 +14,7 @@
 </head>
 <body>
     <div class="outer-container">
+        <!--Jumbotron start-->
         <div class="jumbotron">
             <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel">
                 <div class="carousel-inner">
@@ -29,6 +30,38 @@
                 </div>
             </div>
         </div>
+        <!--Jumbotron end-->
+        <!--Navbar start-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('my_pantry') }}">My Pantry</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Find Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Account</a>
+                    </li>
+                </ul>
+                <span class="navbar-text">
+                    Login/Logout area
+                </span>
+            </div>
+
+        </nav>
+        <!--Navbar end-->
     </div>
 
     <!--Bootstrap JQuery-->
