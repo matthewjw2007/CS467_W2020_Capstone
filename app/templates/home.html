@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div>
+        <div class="row">
+            <div class="col">
+                <h3 id="home-title">Welcome to <br>The Neighborhood Cookbook</h3>
+                <hr id="hr-home">
+                <h5>Site Features:</h5>
+                <ul>
+                    <li>Find recipes based on the ingredients you have on hand</li>
+                    <li>Save your favorites recipes</li>
+                    <li>Get recipes without the storytelling</li>
+                    <li>The site uses web scraping to find recipes from a number of sites</li>
+                </ul>
+            </div>
+            <hr class="vertical-line">
+            <div class="col">col</div>
+            <div class="w-100"></div>
+        </div>
+    </div>
+{% endblock %}

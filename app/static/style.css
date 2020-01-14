@@ -46,3 +46,20 @@ html, body {
 .pt-4, .py-4 {
     padding-top: .5rem!important;
 }
+
+/* Styles for home page specifics*/
+.vertical-line {
+    height: 390px;
+    border: 1px solid black;
+}
+
+#hr-home {
+    border: 1px dashed black;
+    margin-top: 0rem;
+}
+
+.col {
+    margin: 1rem;
+    padding-left: 30px;
+    padding-right: 30px;
+}
