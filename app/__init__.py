@@ -6,6 +6,7 @@ from flask_login import LoginManager
 # Imports for database use
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_wtf import FlaskForm
 
 
 app = Flask(__name__, template_folder='./templates', static_folder='./static')
