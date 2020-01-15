@@ -4,3 +4,5 @@ __pycache__
 .idea/
 app/.DS_Store
 .DS_Store
+app.db
+migrations
