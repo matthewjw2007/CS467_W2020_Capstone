@@ -52,10 +52,10 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                        <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('my_pantry') }}">My Pantry</a>
+                        <a class="nav-link" href="{{ url_for('main.index') }}"</a>>My Pantry</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">My Recipes</a>
@@ -69,9 +69,9 @@
                 </ul>
                 <span class="navbar-text">
                     {% if current_user.is_anonymous %}
-                    <a class="nav-link" href="#">Register</a>
+                    <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
                     {% else %}
-                    <a class="nav-link" href="#">Log Out</a><i class="fas fa-user-minus"></i>
+                    <a class="nav-link" href="{{ url_for('users.logout') }}">Log Out</a><i class="fas fa-user-minus"></i>
                     {% endif %}
                 </span>
             </div>
