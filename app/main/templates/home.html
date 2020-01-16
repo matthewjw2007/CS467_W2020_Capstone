@@ -19,7 +19,7 @@
                 {# current_user variable comes from Flask-Login #}
                 {% if current_user.is_anonymous %}
                     <h6>Log In</h6>
-                    <form action="" method="post" novalidate>
+                    <form action="{{ url_for('users.login') }}" method="post" novalidate>
                         {{ form.hidden_tag() }}
                         <p>
                             {{ form.username.label }}<br>
@@ -38,7 +38,7 @@
                         </p>
                     </form>
                 {% else %}
-                    <h6>Welcome, {{ current_user.name }}</h6>
+                    <h6>Welcome, {{ current_user.username }}</h6>
                 {% endif %}
             </div>
             <div class="w-100"></div>

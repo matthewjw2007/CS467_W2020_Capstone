@@ -9,20 +9,26 @@ from flask_migrate import Migrate
 from flask_wtf import FlaskForm
 
 
-app = Flask(__name__, template_folder='./templates', static_folder='./static')
-app.config.from_object(Config)
 # Database initialization
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-login_helper = LoginManager(app)
+db = SQLAlchemy()
+# migrate = Migrate(app, db)
+login_helper = LoginManager()
+login_helper.login_view = 'users_bp.login'
 
-# Import BP files
-from app import users, pantry, recipes, login, register
-# Register the blueprints for different routes
-app.register_blueprint(login.bp)    # /login
-app.register_blueprint(pantry.bp)   # /pantry
-app.register_blueprint(recipes.bp)  # /recipes
-app.register_blueprint(register.bp) # /register
-app.register_blueprint(users.bp)    # /users
+def create_app():
+    app = Flask(__name__, template_folder='./templates', static_folder='./static')
+    app.config.from_object(Config)
 
-from app import routes, models
+    db.init_app(app)
+    login_helper.init_app(app)
+
+    with app.app_context():
+        from .main.routes import bp as main_bp
+        from .users.routes import bp as users_bp
+
+        db.create_all()
+
+        app.register_blueprint(main_bp, url_prefix='/')
+        app.register_blueprint(users_bp, url_prefix='/users')
+
+    return app
