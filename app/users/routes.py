@@ -10,6 +10,20 @@ from app import db
 bp = Blueprint('users', __name__, template_folder='templates')
 
 
+@bp.route('/user/<username>')
+@login_required
+def user(username):
+    # If user is found then the first appearance of the user is returned otherwise we get a 404 error if no match
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
+
+
+@bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    return render_template('edit_profile.html', title='Edit Profile')
+
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
 
@@ -82,6 +96,7 @@ def login():
         res = make_response(jsonify(error='Invalid HTTP method used for request'))
         res.status_code = 405
         return res
+
 
 @bp.route('/logout', methods=constants.http_verbs)
 @login_required
