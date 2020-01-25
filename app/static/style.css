@@ -1,11 +1,17 @@
 html, body {
     height: 100%
 }
+
+body {
+    background-color: #a3a3c2;
+}
+
 .outer-container{
     margin:1em;
-    border: 2px solid black;
+    border: 1px solid black;
     overflow: auto;
     height: 100%;
+    background-color: #ccf2ff;
 }
 
 .jumbotron {
@@ -36,6 +42,14 @@ html, body {
     padding: 0rem;
 }
 
+.nav-link {
+    padding: 0rem;
+}
+
+.navbar-text {
+    padding-right: 1rem;
+}
+
 #sticky-footer {
     flex-shrink: 0;
 }
@@ -48,7 +62,7 @@ html, body {
     padding-top: .5rem!important;
 }
 
-/* Styles for home page specifics*/
+/* Styles for home.html */
 .vertical-line {
     height: 390px;
     border: 1px solid black;
@@ -63,4 +77,21 @@ html, body {
     margin: 1rem;
     padding-left: 30px;
     padding-right: 30px;
+}
+
+/* Styles for user.html */
+#hr-user {
+    width: 50%;
+    margin-left: 0;
+    margin-top: 0;
+    border: 1px solid black;
+}
+
+#edit-profile-link {
+    text-decoration: underline;
+}
+
+#delete-account-link {
+    text-decoration: underline;
+    margin-left: 1rem;
 }
