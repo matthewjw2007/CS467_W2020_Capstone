@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
 from flask import current_app as app
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
@@ -22,7 +22,16 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email_addr = form.email.data
+        db.session.commit()
+        flash('Profile updated')
+        return redirect(url_for('users.user', username=current_user.username))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email_addr
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
