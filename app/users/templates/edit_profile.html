@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <div>
+        <h1>Edit Profile</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label }}
+                {{ form.username(size=32) }}
+            </p>
+            <p>
+                {{ form.email.label }}
+                {{ form.email(size=32) }}
+            </p>
+            <p>
+                {{ form.submit }}
+            </p>
+        </form>
+        <a href="{{ url_for('users.user', username=current_user.username) }}">Cancel</a>
+    </div>
 {% endblock %}

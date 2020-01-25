@@ -4,6 +4,7 @@ from flask_login import login_user, login_required, logout_user
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
+from app.users.edit_profile_form import EditProfileForm
 from app.models import User
 from app import db
 
@@ -21,7 +22,8 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    return render_template('edit_profile.html', title='Edit Profile')
+    form = EditProfileForm()
+    return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
 @bp.route('/register', methods=['GET', 'POST'])
