@@ -95,3 +95,8 @@ body {
     text-decoration: underline;
     margin-left: 1rem;
 }
+
+/* Styles for edit_profile.html */
+#cancel-link {
+    text-decoration: underline;
+}
