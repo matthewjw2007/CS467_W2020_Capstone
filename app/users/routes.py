@@ -88,12 +88,18 @@ def login():
 
         # Fidn the user
         user =  User.query.filter_by(username=username).first()
-        password_is_correct = check_password_hash(user.password, password)
 
-        # Valid credentials are presented
-        if user and password_is_correct:
-            login_user(user)
-            return redirect(url_for('main.index'))
+        if user:
+            password_is_correct = check_password_hash(user.password, password)
+
+            # Valid credentials are presented
+            if password_is_correct:
+                login_user(user)
+                return redirect(url_for('main.index'))
+            
+            else:
+                flash('Incorrect username and/or password entered. Try again.')
+                return redirect(url_for('main.index'))
 
         # Invalid credentials presented
         else:
