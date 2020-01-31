@@ -35,6 +35,15 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
+@bp.route('/delete_profile', methods=constants.http_verbs)
+@login_required
+def delete_profile():
+    user = User.query.filter_by(username=current_user.username).first()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('main.index'))
+
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
 
@@ -50,7 +59,7 @@ def register():
         password = request.form.get('password')
 
         # Check that the new user isn't already registered
-        user =  User.query.filter_by(email_addr=email).first()
+        user = User.query.filter_by(email_addr=email).first()
         if user:
             flash('A user with this email address already exists.')
             return redirect(url_for('main.index'))

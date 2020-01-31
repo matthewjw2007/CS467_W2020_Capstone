@@ -21,7 +21,7 @@
     </div>
     <div class="col">
         <a id="edit-profile-link" href="{{ url_for('users.edit_profile') }}">Edit Profile</a>
-        <a id="delete-account-link" href="#">Delete Account</a>
+        <a id="delete-account-link" href="{{ url_for('users.delete_profile') }}">Delete Account</a>
     </div>
 
 {% endblock %}
