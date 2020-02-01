@@ -15,6 +15,7 @@ db = SQLAlchemy()
 login_helper = LoginManager()
 login_helper.login_view = 'users_bp.login'
 
+
 def create_app():
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
     app.config.from_object(Config)
@@ -25,10 +26,12 @@ def create_app():
     with app.app_context():
         from .main.routes import bp as main_bp
         from .users.routes import bp as users_bp
+        from .recipes.routes import bp as recipes_bp
 
         db.create_all()
 
         app.register_blueprint(main_bp, url_prefix='/')
         app.register_blueprint(users_bp, url_prefix='/users')
+        app.register_blueprint(recipes_bp, url_prefix='/recipe')
 
     return app

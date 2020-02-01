@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div class="col">
+        <label>Ingredient 1</label>
+        <input type="text" placeholder="Ingredient...">
+        <br>
+        <button id="add-ingredient-btn">Add Ingredient</button>
+        <button type="submit">Search</button>
+    </div>
+
+{% endblock %}
