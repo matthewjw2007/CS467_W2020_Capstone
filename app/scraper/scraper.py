@@ -4,7 +4,7 @@ from urllib.request import urlopen as urlReq
 import json
 import time
 
-def getRecipe(recipeUrl, data):
+def get_recipe(recipeUrl, data):
 	# Opening the connection grabing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
 	htmlRaw = uClient.read()
@@ -49,12 +49,12 @@ def getRecipe(recipeUrl, data):
 	# Add the recipeDict to the data dict
 	data.append(recipeDict)
 
-if __name__ == "__main__":
-	
-	start_time = time.time()
+#if __name__ == "__main__":
+def recipe_search(ingredient):	
+	#start_time = time.time()
 
 	# Search a list of recipes on all recipe.com
-	searchUrl = "https://www.allrecipes.com/search/results/?wt=" + sys.argv[1]
+	searchUrl = "https://www.allrecipes.com/search/results/?wt=" + ingredient #sys.argv[1]
 	recipeUrlList = urlReq(searchUrl)
 	htmlRaw = recipeUrlList.read()
 	recipeUrlList.close()
@@ -67,7 +67,8 @@ if __name__ == "__main__":
 	
 	for recipeCard in recipeCardContainer:
 		recipeUrl = recipeCard.div.a['href']
-		getRecipe(recipeUrl, data['allrecipes'])
+		get_recipe(recipeUrl, data['allrecipes'])
 
-	print (data)
-	print("--- %s seconds ---" % (time.time() - start_time))
+	return data
+	#print (data)
+	#print("--- %s seconds ---" % (time.time() - start_time))

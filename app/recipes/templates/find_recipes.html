@@ -2,15 +2,20 @@
 
 {% block content %}
     <div class="form-group" id="recipe-search">
-        <label for="ingredient-search-txt">Search Recipes</label>
-        <input type="text" class="form-control" id="ingredient-search-txt" placeholder="Ingredient1, Ingredient2, Ingredient3, ...">
-        <div id="ing-srch-btn-div">
-            <button type="submit" class="btn btn-info" id="ingredient-search-btn">Search</button>
-        </div>
-        <hr id="hr-find-recipes">
+        <form action="/recipes/search" method="get">
+            <label for="ingredient-search-txt">Search Recipes</label>
+            <input type="text" class="form-control" id="ingredient-search-txt" name="ingredients" placeholder="Ingredient1, Ingredient2, Ingredient3, ...">
+            <div id="ing-srch-btn-div">
+                <button type="submit" class="btn btn-info" id="ingredient-search-btn">Search</button>
+            </div>
+            <hr id="hr-find-recipes">
+        </form>
     </div>
     <div id="srch-rslts-div">
+        {% if message %}
         <h4>Results</h4>
+        <div>{{ message }}</div>
+        {% endif %}
     </div>
 
 {% endblock %}

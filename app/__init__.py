@@ -7,6 +7,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
+import redis
+from rq import Queue
 
 
 # Database initialization
@@ -14,6 +16,9 @@ db = SQLAlchemy()
 # migrate = Migrate(app, db)
 login_helper = LoginManager()
 login_helper.login_view = 'users_bp.login'
+
+r = redis.Redis()
+q = Queue(connection=r)
 
 
 def create_app():
@@ -32,6 +37,6 @@ def create_app():
 
         app.register_blueprint(main_bp, url_prefix='/')
         app.register_blueprint(users_bp, url_prefix='/users')
-        app.register_blueprint(recipes_bp, url_prefix='/recipe')
+        app.register_blueprint(recipes_bp, url_prefix='/recipes')
 
     return app

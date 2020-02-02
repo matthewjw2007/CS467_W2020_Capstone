@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="srch-rslts-div" onload="update_task()">
+        <h4>Results</h4>
+        {% if payload %}
+        <div id="task-id">{{ payload.task_id }}</div>
+        <div id="status">Status is: {{ payload.status }}</div>
+        <div id="message">{{ payload.message }}</div>
+        {% endif %}
+    </div>
+    <script>
+        document.getElementById('srch-rslts-div').onload = $(function() {
+            var taskID = document.getElementById('task-id').innerHTML;
+            console.log("task_id is:" + taskID);
+            var taskURL = '/recipes/search/' + taskID;
+            $.ajax({
+                type: 'GET',
+                url: taskURL,
+                success: function(data, status, request) {
+                    setTimeout(function() {
+                        console.log("Checking status again...");
+                        update_task(taskURL);
+                    }, 2000);
+                },
+                error: function() {
+                    alert('Unexpected error');
+                }
+            })
+            console.log("Sent request");
+        });
+    
+            function update_task(task_url) {
+                /*$.getJSON(task_url, function(data) {
+                    if (data['status'] != 'finished') {
+                        setTimeout(function() {
+                            console.log("Checking status again...");
+                            update_task(task_url);
+                        }, 2000);
+                    }
+                });*/
+                $.ajax({
+                    type: 'GET',
+                    url: task_url,
+                    success: function(data, status, request) {
+                        setTimeout(function() {
+                            console.log("Checking status again...");
+                            update_task(task_url);
+                        }, 2000);
+                    },
+                    error: function() {
+                        alert('Unexpected error');
+                    }
+                })
+                console.log("Sent request");
+            }
+    </script>
+{% endblock %}
