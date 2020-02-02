@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="col">
-        <label>Ingredient 1</label>
-        <input type="text" placeholder="Ingredient...">
-        <br>
-        <button id="add-ingredient-btn">Add Ingredient</button>
-        <button type="submit">Search</button>
+    <div class="form-group" id="recipe-search">
+        <label for="ingredient-search-txt">Search Recipes</label>
+        <input type="text" class="form-control" id="ingredient-search-txt" placeholder="Ingredient1, Ingredient2, Ingredient3, ...">
+        <div id="ing-srch-btn-div">
+            <button type="submit" class="btn btn-info" id="ingredient-search-btn">Search</button>
+        </div>
+        <hr id="hr-find-recipes">
+    </div>
+    <div id="srch-rslts-div">
+        <h4>Results</h4>
     </div>
 
 {% endblock %}

@@ -100,3 +100,27 @@ body {
 #cancel-link {
     text-decoration: underline;
 }
+
+/* Styles for find_recipes.html */
+#recipe-search {
+    margin: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#ingredient-search-btn {
+    margin-top: .5rem;
+}
+
+#ing-srch-btn-div {
+    float: right;
+    display: inline-block;
+}
+
+#hr-find-recipes {
+    border: 1px solid black;
+    margin-top: 3.5rem
+}
+
+#srch-rslts-div {
+    text-align: center;
+}
