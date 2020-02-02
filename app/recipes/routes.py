@@ -38,27 +38,31 @@ def search_for_recipes():
 
         payload = {
             'task_id': task.id,
-            'message': f'Task {task.id} added to queue.',
+            'results': f'Task {task.id} added to queue.',
             'status': None
         }
 
-    return render_template('waiting_on_recipes.html', payload=payload)
+    return render_template('find_recipes.html', payload=payload)
 
 @bp.route('/search/<task_id>', methods=constants.http_verbs)
 def task_update(task_id):
 
     task = Job.fetch(task_id, connection=r)
 
+    message = dict()
+
+    message['task_id'] = task_id
+    message['status'] = task.get_status()
+
     if task:
         if task.get_status() == 'failed':
-            message = 'Job failed!'
+            message['results'] = 'Job failed!'
         elif task.get_status() == 'finished':
-            message = str(task.result)
-            return render_template('find_recipes.html', message=message)
+            message['results'] = str(task.result)
         else:
-            message = 'Job not finished...'
+            message['results'] = 'Job not finished...'
 
     else:
-        message = 'Something went wrong!'
+        message['results'] = 'Something went wrong!'
 
-    return message
+    return jsonify(message)

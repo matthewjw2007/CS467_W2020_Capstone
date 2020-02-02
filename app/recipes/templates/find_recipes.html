@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="form-group" id="recipe-search">
-        <form action="/recipes/search" method="get">
+        <form action="/recipes/search" method="get"-->
             <label for="ingredient-search-txt">Search Recipes</label>
             <input type="text" class="form-control" id="ingredient-search-txt" name="ingredients" placeholder="Ingredient1, Ingredient2, Ingredient3, ...">
             <div id="ing-srch-btn-div">
@@ -12,9 +12,77 @@
         </form>
     </div>
     <div id="srch-rslts-div">
-        {% if message %}
+        {% if payload %}
         <h4>Results</h4>
-        <div>{{ message }}</div>
+        <div>
+            <ul>
+                <li id="task-id">{{ payload.task_id }}</li>
+                <li id="task-status">{{ payload.status }}</li>
+                <li id="task-results">{{ payload.results }}</li>
+            </ul>
+        </div>
+        <script>
+            $(function() {
+                var taskID = document.getElementById('task-id').innerHTML;
+                console.log("task_id is:" + taskID);
+                var taskURL = '/recipes/search/' + taskID;
+                $.ajax({
+                    type: 'GET',
+                    url: taskURL,
+                    success: function(data, status, request) {
+                        if (data['status'] != 'finished') {
+                            $('#task-id').text( data['task_id'] );
+                            $('#task-status').text( data['status'] );
+                            $('#task-results').text( data['results'] );
+                            console.log('success', data['status']);
+                            setTimeout(function() {
+                                console.log("Checking status again...");
+                                update_task(taskURL);
+                            }, 2000);
+                        }
+                        else {
+                            $('#task-id').text( data['task_id'] );
+                            $('#task-status').text( data['status'] );
+                            $('#task-results').text( data['results'] );
+                            console.log('success', data['status']);
+                        }
+                    },
+                    error: function() {
+                        alert('Unexpected error');
+                    }
+                })
+                console.log("Sent request");
+            });
+        
+                function update_task(task_url) {
+                    $.ajax({
+                        type: 'GET',
+                        url: task_url,
+                        success: function(data, status, request) {
+                            if (data['status'] != 'finished') {
+                                $('#task-id').text( data['task_id'] );
+                                $('#task-status').text( data['status'] );
+                                $('#task-results').text( data['results'] );
+                                console.log('success', data['status']);
+                                setTimeout(function() {
+                                    console.log("Checking status again...");
+                                    update_task(task_url);
+                                }, 2000);
+                            }
+                            else {
+                                $('#task-id').text( data['task_id'] );
+                                $('#task-status').text( data['status'] );
+                                $('#task-results').text( data['results'] );
+                                console.log('success', data['status']);
+                            }
+                        },
+                        error: function() {
+                            alert('Unexpected error');
+                        }
+                    })
+                    console.log("Sent request");
+                }
+        </script>
         {% endif %}
     </div>
 
