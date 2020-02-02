@@ -1,12 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <script>
+        $(function() {
+            $('#submit-button').on('click', function() {
+                var ingredient = $('#input-field').val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/recipes/search/' + ingredient,
+                    success: function(data, status, request) {
+                        status_url = request.getResponseHeader('Location');
+                        update_task(status_url);
+                    },
+                    error: function() {
+                        alert('Unexpected error');
+                    }
+                });
+                console.log("Sent request");
+            });
+        });
+
+        function update_task(status_url) {
+            $.getJSON(status_url, function(data) {
+                if (data['state'] == 'SUCCESS') {
+                    console.log(data);
+                }
+                else {
+                    setTimeout(function() {
+                        console.log("Checking status again...");
+                        update_task(status_url);
+                    }, 2000);
+                }
+            });
+        }
+    </script>
     <div class="col">
         <label>Ingredient 1</label>
-        <input type="text" placeholder="Ingredient...">
+        <input type="text" id="input-field" placeholder="Ingredient...">
         <br>
         <button id="add-ingredient-btn">Add Ingredient</button>
-        <button type="submit">Search</button>
+        <button type="submit" id="submit-button">Search</button>
     </div>
 
 {% endblock %}
