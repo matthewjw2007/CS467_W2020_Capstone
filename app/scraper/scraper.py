@@ -1,10 +1,13 @@
 import sys
-from bs4 import BeautifulSoup
-from urllib.request import urlopen as urlReq
-import json
+from bs4 import BeautifulSoup # Web scraping 
+from urllib.request import urlopen as urlReq # Open URLs
+import concurrent.futures # Thread pool
+
+import pprint # Pretty Print to make things print neatly
+
 import time
 
-def getRecipe(recipeUrl, data):
+def getRecipe(recipeUrl):
 	# Opening the connection grabing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
 	htmlRaw = uClient.read()
@@ -13,41 +16,73 @@ def getRecipe(recipeUrl, data):
 	# Parse raw HTML 
 	soup = BeautifulSoup(htmlRaw, "html.parser")
 
-	recipeDict = {}
+	recipeCard = {}
 
-	# Find title
-	recipeTitle = soup.find("h1", {"class":"headline heading-content"}).text
-	# beef: class=recipe-summary__h1
+	# Store site name into recipe card
+	recipeCard['siteName'] = "All Recipes"
 
-	recipeDict['title'] = recipeTitle
+	# Store URL into recipe card
+	recipeCard['URL'] = recipeUrl
+
+	# Find title and store into recipe card
+	recipeTitle = soup.find("h1").text
+	recipeCard['title'] = recipeTitle
+
+	# Find image URL store into recipe card. 
+	imageContainer = soup.find("div", {"class", "image-container"})
+	if imageContainer:
+		imageUrl = imageContainer.div['data-src']
+	else:
+		imageContainer = soup.find("img", {"class", "rec-photo"})
+		imageUrl = imageContainer['src']
+	recipeCard['image'] = imageUrl
 
 	# Find metadata of the recipe
-	recipeMetadata = soup.findAll("div", {"class":"recipe-meta-item"})
 	metadataAry = []
-	for metadata in recipeMetadata:
-		metadataHeader = metadata.find("div", {"class", "recipe-meta-item-header"}).text.strip()
-		metadataBody = metadata.find("div", {"class", "recipe-meta-item-body"}).text.strip()
-		metadataAry.append({metadataHeader: metadataBody})
-	recipeDict['metadata'] = metadataAry
+	recipeMetadata = soup.findAll("div", {"class":"recipe-meta-item"})
+	if recipeMetadata:
+		for metadata in recipeMetadata:
+			metadataHeader = metadata.find("div", {"class", "recipe-meta-item-header"}).text.strip()
+			metadataBody = metadata.find("div", {"class", "recipe-meta-item-body"}).text.strip()
+			metadataEntry = metadataHeader + ' ' + metadataBody
+			metadataAry.append(metadataEntry)
+	else:
+		recipeMetadata = soup.findAll("li",{"aria-label":True})
+		for metadata in recipeMetadata:
+			metadataEntry = metadata['aria-label']
+			metadataAry.append(metadataEntry)
+	recipeCard['metadata'] = metadataAry
 
 	# Find ingredients
-	ingredientList = soup.findAll("li", {"class":"ingredients-item"})
 	ingredientListAry = []
-	for ingredientItem in ingredientList:
-		ingredient = ingredientItem.find("span", {"class":"ingredients-item-name"}).text.strip()
-		ingredientListAry.append(ingredient)
-	recipeDict['ingredients'] = ingredientListAry
+	ingredientList = soup.findAll("li", {"class":"ingredients-item"})
+	if ingredientList:
+		for ingredientItem in ingredientList:
+			ingredient = ingredientItem.find("span", {"class":"ingredients-item-name"}).text.strip()
+			ingredientListAry.append(ingredient)
+	else:
+		ingredientList = soup.findAll("label", {"title":True})
+		for ingredientItem in ingredientList:
+			ingredient = ingredientItem['title']
+			ingredientListAry.append(ingredient)
+	recipeCard['ingredients'] = ingredientListAry
 
 	# Find Instructions
-	InstructionsContainer = soup.findAll("li",{"class":"subcontainer instructions-section-item"})
 	instructionsAry = []
-	for instructionItem in InstructionsContainer:
-		instruction = instructionItem.p.text
-		instructionsAry.append(instruction)
-	recipeDict['instructions'] = instructionsAry
+	instructionsContainer = soup.findAll("li",{"class":"subcontainer instructions-section-item"})
+	if instructionsContainer:
+		for instructionItem in instructionsContainer:
+			instruction = instructionItem.p.text
+			instructionsAry.append(instruction)
+	else:
+		instructionsContainer = soup.findAll("span",{"class":"recipe-directions__list--item"})
+		for instructionItem in instructionsContainer:
+			instruction = instructionItem.text.strip()
+			instructionsAry.append(instruction)
+	recipeCard['instructions'] = instructionsAry
 
-	# Add the recipeDict to the data dict
-	data.append(recipeDict)
+	# Return single recipe as dictionary
+	return recipeCard
 
 if __name__ == "__main__":
 	
@@ -61,13 +96,18 @@ if __name__ == "__main__":
 
 	soup = BeautifulSoup(htmlRaw, "html.parser")
 
-	data = {'allrecipes': []}
+	recipeBook = []
 
-	recipeCardContainer = soup.findAll("article", {"class":"fixed-recipe-card"})
-	
-	for recipeCard in recipeCardContainer:
-		recipeUrl = recipeCard.div.a['href']
-		getRecipe(recipeUrl, data['allrecipes'])
+	# Git a list of recipes from main search result page
+	recipeUrlList = []
+	recipeBlockContainer = soup.findAll("article", {"class":"fixed-recipe-card"})
+	for recipeBlock in recipeBlockContainer:
+		recipeUrl = recipeBlock.div.a['href']
+		recipeUrlList.append(recipeUrl)
+		
+	with concurrent.futures.ThreadPoolExecutor() as executor:
+		results = [executor.submit(getRecipe, recipeUrl) for recipeUrl in recipeUrlList]
+		for f in concurrent.futures.as_completed(results):
+			recipeBook.append(f.result())
 
-	print (data)
 	print("--- %s seconds ---" % (time.time() - start_time))
