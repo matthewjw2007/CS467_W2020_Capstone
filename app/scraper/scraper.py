@@ -7,7 +7,7 @@ import pprint # Pretty Print to make things print neatly
 
 import time
 
-def getRecipe(recipeUrl):
+def get_recipe(recipeUrl):
 	# Opening the connection grabing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
 	htmlRaw = uClient.read()
@@ -17,9 +17,6 @@ def getRecipe(recipeUrl):
 	soup = BeautifulSoup(htmlRaw, "html.parser")
 
 	recipeCard = {}
-
-	# Store site name into recipe card
-	recipeCard['siteName'] = "All Recipes"
 
 	# Store URL into recipe card
 	recipeCard['URL'] = recipeUrl
@@ -84,17 +81,20 @@ def getRecipe(recipeUrl):
 	# Return single recipe as dictionary
 	return recipeCard
 
-if __name__ == "__main__":
-	
-	start_time = time.time()
+# if __name__ == "__main__":
+def recipe_search(ingredient):
+
+	# start_time = time.time()
 
 	# Search a list of recipes on all recipe.com
-	searchUrl = "https://www.allrecipes.com/search/results/?wt=" + sys.argv[1]
+	searchUrl = "https://www.allrecipes.com/search/results/?wt=" + ingredient # sys.argv[1]
 	recipeUrlList = urlReq(searchUrl)
 	htmlRaw = recipeUrlList.read()
 	recipeUrlList.close()
 
 	soup = BeautifulSoup(htmlRaw, "html.parser")
+
+	recipeDict = {}
 
 	recipeBook = []
 
@@ -106,8 +106,14 @@ if __name__ == "__main__":
 		recipeUrlList.append(recipeUrl)
 		
 	with concurrent.futures.ThreadPoolExecutor() as executor:
-		results = [executor.submit(getRecipe, recipeUrl) for recipeUrl in recipeUrlList]
+		results = [executor.submit(get_recipe, recipeUrl) for recipeUrl in recipeUrlList]
 		for f in concurrent.futures.as_completed(results):
 			recipeBook.append(f.result())
 
-	print("--- %s seconds ---" % (time.time() - start_time))
+	recipeDict['allrecipes'] = recipeBook
+
+	return recipeDict
+
+	# print (recipeDict)
+
+	# print("--- %s seconds ---" % (time.time() - start_time))
