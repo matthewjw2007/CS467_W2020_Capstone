@@ -19,10 +19,14 @@ def find_recipes():
 @bp.route('/search', methods=constants.http_verbs)
 def search_for_recipes():
 
-    if request.args:
+    if request.args.get('ingredients') != '':
 
         ingredients = request.args.get('ingredients')
 
         payload = recipe_search(ingredients.split())
+
+    else:
+
+        payload = {'error': 'Nothing was entered in the search bar.'}
 
     return render_template('find_recipes.html', payload=payload)

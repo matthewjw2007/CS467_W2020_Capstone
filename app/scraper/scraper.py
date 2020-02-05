@@ -86,10 +86,10 @@ def recipe_search(ingredients):
 
 	recipeDict = {}
 
+	ingredientDict = {}
+
 	# Search for individual ingredients
 	for item in ingredients:
-
-		ingredientDict = {}
 
 		# Search a list of recipes on all recipe.com
 		searchUrl = "https://www.allrecipes.com/search/results/?wt=" + item

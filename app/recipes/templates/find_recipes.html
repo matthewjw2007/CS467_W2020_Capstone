@@ -15,7 +15,15 @@
     <div id="srch-rslts-div">
         <h4>Results</h4>
         <div id="results-div">
-            {{payload}}
+            {% for website, ingredients in payload.items() %}
+                <h1>{{website}}</h1>
+                <h2>{{ingredients}}</h2>
+                <ul></ul>
+                    {% for recipes in ingredients.items() %}
+                    <li>{{recipes}}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
