@@ -4,6 +4,7 @@ from urllib.request import urlopen as urlReq
 import json
 import time
 
+
 def getRecipe(recipeUrl, data):
 	# Opening the connection grabing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
@@ -48,6 +49,7 @@ def getRecipe(recipeUrl, data):
 
 	# Add the recipeDict to the data dict
 	data.append(recipeDict)
+
 
 if __name__ == "__main__":
 	
