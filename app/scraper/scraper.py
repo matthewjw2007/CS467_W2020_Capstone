@@ -82,38 +82,39 @@ def get_recipe(recipeUrl):
 	return recipeCard
 
 # if __name__ == "__main__":
-def recipe_search(ingredient):
-
-	# start_time = time.time()
-
-	# Search a list of recipes on all recipe.com
-	searchUrl = "https://www.allrecipes.com/search/results/?wt=" + ingredient # sys.argv[1]
-	recipeUrlList = urlReq(searchUrl)
-	htmlRaw = recipeUrlList.read()
-	recipeUrlList.close()
-
-	soup = BeautifulSoup(htmlRaw, "html.parser")
+def recipe_search(ingredients):
 
 	recipeDict = {}
 
-	recipeBook = []
+	# Search for individual ingredients
+	for item in ingredients:
 
-	# Git a list of recipes from main search result page
-	recipeUrlList = []
-	recipeBlockContainer = soup.findAll("article", {"class":"fixed-recipe-card"})
-	for recipeBlock in recipeBlockContainer:
-		recipeUrl = recipeBlock.div.a['href']
-		recipeUrlList.append(recipeUrl)
-		
-	with concurrent.futures.ThreadPoolExecutor() as executor:
-		results = [executor.submit(get_recipe, recipeUrl) for recipeUrl in recipeUrlList]
-		for f in concurrent.futures.as_completed(results):
-			recipeBook.append(f.result())
+		ingredientDict = {}
 
-	recipeDict['allrecipes'] = recipeBook
+		# Search a list of recipes on all recipe.com
+		searchUrl = "https://www.allrecipes.com/search/results/?wt=" + item
+		recipeUrlList = urlReq(searchUrl)
+		htmlRaw = recipeUrlList.read()
+		recipeUrlList.close()
+
+		soup = BeautifulSoup(htmlRaw, "html.parser")
+
+		recipeBook = []
+
+		# Git a list of recipes from main search result page
+		recipeUrlList = []
+		recipeBlockContainer = soup.findAll("article", {"class":"fixed-recipe-card"})
+		for recipeBlock in recipeBlockContainer:
+			recipeUrl = recipeBlock.div.a['href']
+			recipeUrlList.append(recipeUrl)
+			
+		with concurrent.futures.ThreadPoolExecutor() as executor:
+			results = [executor.submit(get_recipe, recipeUrl) for recipeUrl in recipeUrlList]
+			for f in concurrent.futures.as_completed(results):
+				recipeBook.append(f.result())
+
+		ingredientDict[item] = recipeBook
+
+	recipeDict['allrecipes'] = ingredientDict
 
 	return recipeDict
-
-	# print (recipeDict)
-
-	# print("--- %s seconds ---" % (time.time() - start_time))

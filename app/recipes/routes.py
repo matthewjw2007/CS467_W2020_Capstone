@@ -7,6 +7,7 @@ from app.users.register_form import RegisterForm
 from app.users.edit_profile_form import EditProfileForm
 from app.models import User
 from app import db
+from app.scraper.scraper import recipe_search
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
 
@@ -14,3 +15,14 @@ bp = Blueprint('recipes', __name__, template_folder='templates')
 @bp.route('find_recipes', methods=constants.http_verbs)
 def find_recipes():
     return render_template('find_recipes.html')
+
+@bp.route('/search', methods=constants.http_verbs)
+def search_for_recipes():
+
+    if request.args:
+
+        ingredients = request.args.get('ingredients')
+
+        payload = recipe_search(ingredients.split())
+
+    return render_template('find_recipes.html', payload=payload)
