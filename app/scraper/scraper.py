@@ -81,12 +81,13 @@ def get_recipe(recipeUrl):
 	# Return single recipe as dictionary
 	return recipeCard
 
-# if __name__ == "__main__":
 def recipe_search(ingredients):
 
 	recipeDict = {}
 
 	ingredientDict = {}
+
+	# print (f"Contents of recipe_search input: {ingredients}")
 
 	# Search for individual ingredients
 	for item in ingredients:
