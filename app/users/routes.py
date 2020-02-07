@@ -123,16 +123,16 @@ def login():
         res.status_code = 405
         return res
 
+
 @bp.route('/recipes', methods=constants.http_verbs)
 def save_recipe():
     if request.method == 'POST':
         recipe_name = request.form.get('recipe-title')
         recipe_url = request.form.get('recipe-URL')
 
-        print (recipe_name)
-        print (recipe_url)
+        print(recipe_name)
+        print(recipe_url)
     return redirect(url_for('main.index'))
-    
 
 
 @bp.route('/logout', methods=constants.http_verbs)

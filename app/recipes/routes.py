@@ -23,28 +23,9 @@ def find_recipes():
                 if item[-1].isalpha() != True:
                     item = item[:-1]
                 ingredientList.append(item)
-            print (ingredientList)
-            print (ingredients)
+            # print(ingredientList)
+            # print(ingredients)
             payload = recipe_search(ingredientList)
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
-
-
-# @bp.route('/search', methods=constants.http_verbs)
-# def search_for_recipes():
-#     if request.method == 'POST':
-#         if request.form.get('ingredients') != '':
-#             ingredients = request.form.get('ingredients').split()
-#             ingredientList = list()
-#             for item in ingredients:
-#                 if item[-1].isalpha() != True:
-#                     item = item[:-1]
-#                 ingredientList.append(item)
-#             print (ingredientList)
-#             print (ingredients)
-#             payload = recipe_search(ingredientList)
-#         else:
-#             payload = {'error': 'Nothing was entered in the search bar.'}
-#         form = SearchForm()
-#         return render_template('find_recipes.html', form=form, payload=payload)

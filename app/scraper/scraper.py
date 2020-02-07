@@ -7,8 +7,9 @@ import pprint # Pretty Print to make things print neatly
 
 import time
 
+
 def get_recipe(recipeUrl):
-	# Opening the connection grabing webpage, store all raw information
+	# Opening the connection grabbing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
 	htmlRaw = uClient.read()
 	uClient.close()
@@ -36,7 +37,7 @@ def get_recipe(recipeUrl):
 
 	# Find metadata of the recipe
 	metadataAry = []
-	recipeMetadata = soup.findAll("div", {"class":"recipe-meta-item"})
+	recipeMetadata = soup.findAll("div", {"class": "recipe-meta-item"})
 	if recipeMetadata:
 		for metadata in recipeMetadata:
 			metadataHeader = metadata.find("div", {"class", "recipe-meta-item-header"}).text.strip()
@@ -81,6 +82,7 @@ def get_recipe(recipeUrl):
 	# Return single recipe as dictionary
 	return recipeCard
 
+
 def recipe_search(ingredients):
 
 	recipeDict = {}
@@ -104,7 +106,7 @@ def recipe_search(ingredients):
 
 		# Git a list of recipes from main search result page
 		recipeUrlList = []
-		recipeBlockContainer = soup.findAll("article", {"class":"fixed-recipe-card"})
+		recipeBlockContainer = soup.findAll("article", {"class": "fixed-recipe-card"})
 		for recipeBlock in recipeBlockContainer:
 			recipeUrl = recipeBlock.div.a['href']
 			recipeUrlList.append(recipeUrl)

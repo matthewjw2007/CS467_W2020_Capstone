@@ -37,9 +37,9 @@
                                     <input type="text" value="{{ recipe.URL }}" name="recipe-URL" hidden>
                                     <li>
                                         {% if current_user.is_anonymous %}
-                                        <button type="submit">Login</button>
+                                        <p></p>
                                         {% else %}
-                                        <button type="submit">Save Recipe</button>
+                                        <button type="submit" class="save-recipe-btn" onclick="addRecipe()">Save Recipe</button>
                                         {% endif %}
                                     </li>
                                 </form>
