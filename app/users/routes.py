@@ -125,14 +125,16 @@ def login():
 
 
 @bp.route('/recipes', methods=constants.http_verbs)
+@login_required
 def save_recipe():
     if request.method == 'POST':
-        recipe_name = request.form.get('recipe-title')
-        recipe_url = request.form.get('recipe-URL')
+        recipe_name = request.form.get('title')
+        recipe_url = request.form.get('url')
 
         print(recipe_name)
         print(recipe_url)
-    return redirect(url_for('main.index'))
+        print('Printed from /users/recipes')
+    return "Successful POST request"
 
 
 @bp.route('/logout', methods=constants.http_verbs)
