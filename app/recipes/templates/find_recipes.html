@@ -67,7 +67,12 @@
                     user: {{ current_user.id }}
                 },
                 function(data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                    if (status == 'success') {
+                        $('.save-recipe-btn').toggle();
+                    }
+                    else {
+                        alert("Error with saving recipe.\nStatus: " + status);
+                    }
                 });
             });
         });

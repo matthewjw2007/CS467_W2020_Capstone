@@ -31,7 +31,7 @@
                     url: "/users/recipes/" + recipeId,
                     type: "DELETE",
                     success: function(data, status) {
-                        $.load("/users/" + {{ current_user.id }} + "/recipes");
+                        location.reload(true);
                     }
                 });
             });
