@@ -124,3 +124,36 @@ body {
 #srch-rslts-div {
     text-align: center;
 }
+
+#results-header {
+    font-family: 'Fondamento', cursive;
+}
+
+#website-name {
+    text-align: left;
+    font-family: 'Fondamento', cursive;
+}
+
+#ingredient-name {
+    text-align: left;
+    font-family: 'Fondamento', cursive;
+}
+
+#results-hr {
+    border: 1px solid black;
+    margin-top: .5rem;
+    width: 25%;
+    margin-left: 0;
+}
+
+.recipe-title {
+    text-align: left;
+}
+
+.rcp-picture {
+    text-align: left;
+}
+
+.recipe-link {
+    text-align: left;
+}

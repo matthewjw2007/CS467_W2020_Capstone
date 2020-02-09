@@ -17,27 +17,26 @@
 
     {% if payload %}
     <div id="srch-rslts-div">
-        <h1>Results</h1>
-        <div id="results-div">
+        <h1 id="results-header">Results</h1>
+        <div id="results-div" class="col">
             {% set count = [ ] %}
             {% for website, ingredients in payload.items() %}
-            <h3>{{website}}</h3>
+            <h4 id="website-name">Website: {{website}}</h4>
                 {% for ingredient, recipes in ingredients.items() %}
-                <h4>{{ingredient}}</h4>
+                <h5 id="ingredient-name">Ingredient(s): {{ingredient}}</h5>
+                    <hr id="results-hr">
                     <ol>
                     {% for recipe in recipes %}
                         <li>
                             <p>
                                 <form action="{{url_for('users.save_recipe')}}" method="post">
                                     {% set __ = count.append(1) %}
-                                    <p class="recipe-title" id="recipe-title{{count|length}}">{{recipe.title}}</p>
+                                    <p class="recipe-title" id="recipe-title{{count|length}}">Recipe Name: {{recipe.title}}</p>
                                     <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
-                                    <p><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
-                                    <p><a href={{recipe.URL}}>Link to recipe</a></p>
-                                    <!--input type="text" id="recipe-url" value="{{recipe.URL}}" name="recipe-URL" hidden-->
+                                    <p class="rcp-picture"><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
+                                    <p class="recipe-link">Recipe Link: <a href={{recipe.URL}}>Link</a></p>
                                     <p>
                                         {% if current_user.is_anonymous %}
-                                        <p></p>
                                         {% else %}
                                         <button type="button" class="save-recipe-btn" data-title="recipe-title{{count|length}}" data-url="recipe-url{{count|length}}">Save Recipe</button>
                                         {% endif %}
