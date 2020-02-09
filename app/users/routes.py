@@ -5,7 +5,7 @@ import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
 from app.users.edit_profile_form import EditProfileForm
-from app.models import User
+from app.models import User, Recipes
 from app import db
 
 bp = Blueprint('users', __name__, template_folder='templates')
@@ -95,7 +95,7 @@ def login():
         password = request.form.get('password')
         remember = True if request.form.get('remember') else False
 
-        # Fidn the user
+        # Find the user
         user =  User.query.filter_by(username=username).first()
 
         if user:
@@ -130,11 +130,47 @@ def save_recipe():
     if request.method == 'POST':
         recipe_name = request.form.get('title')
         recipe_url = request.form.get('url')
+        user_id = request.form.get('user')
+        # Find the user
+        user =  User.query.filter_by(id=user_id).first()
+
+        new_recipe = Recipes(recipe_name=recipe_name, source_url=recipe_url, added_by=user.id)
+        # Add the new recipe to the db
+        db.session.add(new_recipe)
+        db.session.commit()
 
         print(recipe_name)
         print(recipe_url)
+        print(f'Submitted user is {user_id} and user in db is {user.id}.')
         print('Printed from /users/recipes')
     return "Successful POST request"
+
+@bp.route('/<user_id>/recipes', methods=constants.http_verbs)
+@login_required
+def get_recipes(user_id):
+    if request.method == 'GET':
+        # Find the user
+        user =  User.query.filter_by(id=user_id).first()
+        recipes = Recipes.query.filter_by(added_by=user_id).all()
+        return render_template('my_recipes.html', recipes=recipes)
+
+@bp.route('/recipes/<recipe_id>', methods=constants.http_verbs)
+@login_required
+def delete_recipes(recipe_id):
+    if request.method == 'DELETE':
+        # Find the user
+        user =  User.query.filter_by(id=current_user.id).first()
+        recipe = Recipes.query.filter_by(id=recipe_id).first()
+
+        if recipe.added_by == user.id:
+            db.session.delete(recipe)
+            db.session.commit()
+            return "Successful deletion."
+        
+        else:
+            return "Unable to delete this recipe."
+
+
 
 
 @bp.route('/logout', methods=constants.http_verbs)

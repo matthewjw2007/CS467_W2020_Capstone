@@ -26,7 +26,7 @@ class Recipes(db.Model):
     added_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Recipe {}>'.format(self.body)
+        return f'Recipe {self.id}, {self.recipe_name}, {self.source_url}, {self.added_by}'
 
 
 # User's ingredients/pantry table
