@@ -39,11 +39,11 @@ body {
 }
 
 .navbar {
-    padding: 0rem;
+    padding: 0;
 }
 
 .nav-link {
-    padding: 0rem;
+    padding: 0;
 }
 
 .navbar-text {
@@ -70,7 +70,7 @@ body {
 
 #hr-home {
     border: 1px dashed black;
-    margin-top: 0rem;
+    margin-top: 0;
 }
 
 .col {
@@ -103,8 +103,7 @@ body {
 
 /* Styles for find_recipes.html */
 #recipe-search {
-    margin: 1.5rem;
-    margin-bottom: 1rem;
+    margin: 1.5rem 1.5rem 1rem 1.5rem;
 }
 
 #ingredient-search-btn {
@@ -126,17 +125,18 @@ body {
 }
 
 #results-header {
-    font-family: 'Fondamento', cursive;
+    font-family: 'Kaushan Script', cursive;
 }
 
 #website-name {
     text-align: left;
-    font-family: 'Fondamento', cursive;
+    font-family: 'Kaushan Script', cursive;
 }
 
 #ingredient-name {
     text-align: left;
-    font-family: 'Fondamento', cursive;
+    font-family: 'Kaushan Script', cursive;
+    clear: left;
 }
 
 #results-hr {
@@ -146,14 +146,33 @@ body {
     margin-left: 0;
 }
 
+#results-ol {
+    padding-inline-start: 20px;
+}
+
+.li-number {
+    clear: left;
+}
+
 .recipe-title {
     text-align: left;
+    margin-bottom: 0.5rem;
 }
 
 .rcp-picture {
     text-align: left;
 }
 
+.recipe-picture {
+    float: left;
+    margin: 0rem 1rem 1rem 1rem;
+}
+
 .recipe-link {
     text-align: left;
+    margin-bottom: 0.5rem;
+}
+
+.save-recipe-btn {
+    float: right;
 }
