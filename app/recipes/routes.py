@@ -23,8 +23,6 @@ def find_recipes():
                 if item[-1].isalpha() != True:
                     item = item[:-1]
                 ingredientList.append(item)
-            # print(ingredientList)
-            # print(ingredients)
             payload = recipe_search(ingredientList)
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}

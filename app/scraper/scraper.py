@@ -7,6 +7,35 @@ import pprint # Pretty Print to make things print neatly
 
 import time
 
+def get_recipe_list(recipeUrl):
+	# Opening the connection grabbing webpage, store all raw information
+	uClient = urlReq(recipeUrl)
+	htmlRaw = uClient.read()
+	uClient.close()
+
+	# Parse raw HTML 
+	soup = BeautifulSoup(htmlRaw, "html.parser")
+
+	recipeCard = {}
+
+	# Store URL into recipe card
+	recipeCard['URL'] = recipeUrl
+
+	# Find title and store into recipe card
+	recipeTitle = soup.find("h1").text
+	recipeCard['title'] = recipeTitle
+
+	# Find image URL store into recipe card. 
+	imageContainer = soup.find("div", {"class", "image-container"})
+	if imageContainer:
+		imageUrl = imageContainer.div['data-src']
+	else:
+		imageContainer = soup.find("img", {"class", "rec-photo"})
+		imageUrl = imageContainer['src']
+	recipeCard['image'] = imageUrl
+
+	# Return single recipe as dictionary
+	return recipeCard
 
 def get_recipe(recipeUrl):
 	# Opening the connection grabbing webpage, store all raw information
@@ -112,7 +141,7 @@ def recipe_search(ingredients):
 			recipeUrlList.append(recipeUrl)
 			
 		with concurrent.futures.ThreadPoolExecutor() as executor:
-			results = [executor.submit(get_recipe, recipeUrl) for recipeUrl in recipeUrlList]
+			results = [executor.submit(get_recipe_list, recipeUrl) for recipeUrl in recipeUrlList]
 			for f in concurrent.futures.as_completed(results):
 				recipeBook.append(f.result())
 
