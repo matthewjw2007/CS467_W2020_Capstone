@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.recipes.search_form import SearchForm
 from app.models import User, Recipes
 from app import db
-from app.scraper.scraper import recipe_search
+from app.scraper.scraper import recipe_search, get_recipe
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
 
@@ -27,3 +27,10 @@ def find_recipes():
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
+
+@bp.route('/view', methods=constants.http_verbs)
+def view_recipe():
+    payload = dict()
+    recipeUrl = request.args.get('url')
+    recipe = get_recipe(recipeUrl)
+    return render_template('show_recipe.html', payload=recipe)

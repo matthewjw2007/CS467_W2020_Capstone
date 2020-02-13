@@ -28,22 +28,22 @@
                     <ol id="results-ol">
                     {% for recipe in recipes %}
                         <li class="li-number">
-                            <p>
-                                <form action="{{url_for('users.save_recipe')}}" method="post">
-                                    {% set __ = count.append(1) %}
+                            <form action="{{url_for('users.save_recipe')}}" method="post">
+                                {% set __ = count.append(1) %}
+                                <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.URL}}">
                                     <p class="rcp-picture"><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
                                     <p class="recipe-title" id="recipe-title{{count|length}}">Recipe Name: {{recipe.title}}</p>
-                                    <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
-                                    <p class="recipe-link">Recipe Link: <a href={{recipe.URL}}>Link</a></p>
-                                    <p>
-                                        {% if current_user.is_anonymous %}
-                                        {% else %}
-                                        <button type="button" class="save-recipe-btn" data-title="recipe-title{{count|length}}" data-url="recipe-url{{count|length}}">Save Recipe</button>
-                                        {% endif %}
-                                    </p>
-                                    <li id="recipe-url{{count|length}}" hidden>{{recipe.URL}}</li>
-                                </form>
-                            </p>
+                                </a>
+                                <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
+                                <p class="recipe-link">Source: <a target="_blank" href={{recipe.URL}}>Link</a></p>
+                                <p>
+                                    {% if current_user.is_anonymous %}
+                                    {% else %}
+                                    <button type="button" class="save-recipe-btn" data-title="recipe-title{{count|length}}" data-url="recipe-url{{count|length}}">Save Recipe</button>
+                                    {% endif %}
+                                </p>
+                                <li id="recipe-url{{count|length}}" hidden>{{recipe.URL}}</li>
+                            </form>
                         </li>
                     {% endfor %}
                     </ol>
@@ -53,7 +53,7 @@
     </div>
     <script>
         $(function() {
-            $('.save-recipe-btn').on('click', function() {
+            $('.save-recipe-btn').click(function() {
                 var button = $(this);
                 let TitleObj = $(this).attr('data-title');
                 let URLObj = $(this).attr('data-url');
