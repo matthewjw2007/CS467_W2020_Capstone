@@ -7,6 +7,7 @@ import pprint # Pretty Print to make things print neatly
 
 import time
 
+
 def get_recipe_list(recipeUrl):
 	# Opening the connection grabbing webpage, store all raw information
 	uClient = urlReq(recipeUrl)
@@ -25,6 +26,10 @@ def get_recipe_list(recipeUrl):
 	recipeTitle = soup.find("h1").text
 	recipeCard['title'] = recipeTitle
 
+	# Find the star rating and store into recipe card - grabbing the value in aria-label
+	recipe_stars = soup.find('span', {'class', 'review-star-text'})
+	recipeCard['stars'] = recipe_stars.text
+
 	# Find image URL store into recipe card. 
 	imageContainer = soup.find("div", {"class", "image-container"})
 	if imageContainer:
@@ -36,6 +41,7 @@ def get_recipe_list(recipeUrl):
 
 	# Return single recipe as dictionary
 	return recipeCard
+
 
 def get_recipe(recipeUrl):
 	# Opening the connection grabbing webpage, store all raw information
@@ -74,7 +80,7 @@ def get_recipe(recipeUrl):
 			metadataEntry = metadataHeader + ' ' + metadataBody
 			metadataAry.append(metadataEntry)
 	else:
-		recipeMetadata = soup.findAll("li",{"aria-label":True})
+		recipeMetadata = soup.findAll("li", {"aria-label": True})
 		for metadata in recipeMetadata:
 			metadataEntry = metadata['aria-label']
 			metadataAry.append(metadataEntry)
@@ -82,13 +88,13 @@ def get_recipe(recipeUrl):
 
 	# Find ingredients
 	ingredientListAry = []
-	ingredientList = soup.findAll("li", {"class":"ingredients-item"})
+	ingredientList = soup.findAll("li", {"class": "ingredients-item"})
 	if ingredientList:
 		for ingredientItem in ingredientList:
 			ingredient = ingredientItem.find("span", {"class":"ingredients-item-name"}).text.strip()
 			ingredientListAry.append(ingredient)
 	else:
-		ingredientList = soup.findAll("label", {"title":True})
+		ingredientList = soup.findAll("label", {"title": True})
 		for ingredientItem in ingredientList:
 			ingredient = ingredientItem['title']
 			ingredientListAry.append(ingredient)
@@ -133,7 +139,7 @@ def recipe_search(ingredients):
 
 		recipeBook = []
 
-		# Git a list of recipes from main search result page
+		# Get a list of recipes from main search result page
 		recipeUrlList = []
 		recipeBlockContainer = soup.findAll("article", {"class": "fixed-recipe-card"})
 		for recipeBlock in recipeBlockContainer:

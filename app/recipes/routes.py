@@ -28,6 +28,7 @@ def find_recipes():
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
 
+
 @bp.route('/view', methods=constants.http_verbs)
 def view_recipe():
     payload = dict()

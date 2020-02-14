@@ -51,10 +51,11 @@
             {% endfor %}
         </div>
     </div>
+
     <script>
         $(function() {
             $('.save-recipe-btn').click(function() {
-                var button = $(this);
+                let button = $(this);
                 let TitleObj = $(this).attr('data-title');
                 let URLObj = $(this).attr('data-url');
                 let recipeTitle = $('#' + TitleObj).text();
