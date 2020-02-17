@@ -17,6 +17,12 @@ def find_recipes():
     payload = dict()
     if request.method == 'POST':
         if request.form.get('ingredients') != '':
+            if request.form.get('allRecipes') is not None:
+                print('All Recipes')
+            if request.form.get('foodNetwork') is not None:
+                print('Food Network')
+            if request.form.get('allSites') is not None:
+                print('All Sites')
             ingredients = request.form.get('ingredients').split()
             ingredientList = list()
             for item in ingredients:

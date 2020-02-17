@@ -5,5 +5,4 @@ from wtforms.validators import DataRequired
 
 class SearchForm(FlaskForm):
     ingredients = StringField('Search for Recipes', validators=[DataRequired()], render_kw={'placeholder': 'Ingredient1, Ingredient2, Ingredient3, ...'})
-    websites = StringField('Websites', validators=[DataRequired()])
     submit = SubmitField('Search')
