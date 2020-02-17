@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if payload %}
+    <div id="srch-rslts-div">
+        <h1 id="results-header">{{payload.title}}</h1>
+        <h5>
+            <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
+        </h5>
+        <div id="results-div" class="col">
+            <img src="{{payload.image}}" width="500" height="500">
+        </div>
+        <div>
+            <h3>Ingredients</h3>
+            <ul>
+                {% for item in payload.ingredients %}
+                <li>{{item}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h3>Directions</h3>
+            <ul>
+                {% for item in payload.instructions %}
+                <li>{{item}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

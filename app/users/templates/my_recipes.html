@@ -9,7 +9,9 @@
             {% for recipe in recipes %}
             {% set __ = count.append(1) %}
             <ul>
-                <li class="recipe-title" id="recipe-title{{count|length}}">{{recipe.recipe_name}}</li>
+                <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.source_url}}">
+                    <li class="recipe-title" id="recipe-title{{count|length}}">{{recipe.recipe_name}}</li>
+                </a>
                 <li>
                     <a href={{recipe.source_url}}>Link to recipe</a>
                 </li>
