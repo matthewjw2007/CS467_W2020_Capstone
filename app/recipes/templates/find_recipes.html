@@ -4,11 +4,17 @@
     <div class="form-group" id="recipe-search">
         <form class="form-group" method="post" action="search">
             {{ form.hidden_tag() }}
-            <p>
+            <p id="find-recipe-search-box">
                 {{ form.ingredients.label }}
                 {{ form.ingredients(size=32) }}
             </p>
-            <p>
+            <input type="checkbox" id="all-recipes-checkbox" name="allRecipes" value="All Recipes">
+            <label class="find-recipe-checkbox-labels" for="all-recipes-checkbox">All Recipes</label>
+            <input type="checkbox" id="food-network-checkbox" name="foodNetwork" value="Food Network">
+            <label class="find-recipe-checkbox-labels" for="food-network-checkbox">Food Network</label>
+            <input type="checkbox" id="all-sites-checkbox" name="allSites" value="All Sites">
+            <label class="find-recipe-checkbox-labels" for="all-sites-checkbox">All Sites</label>
+            <p id="find-recipe-submit-btn">
                 {{ form.submit }}
             </p>
         </form>

@@ -110,6 +110,18 @@ body {
     margin-top: .5rem;
 }
 
+#find-recipe-search-box {
+    margin: 0rem;
+}
+
+.find-recipe-checkbox-labels {
+    margin: 0rem 1rem 0.25rem 0.5rem;
+}
+
+#find-recipe-submit-btn {
+    margin: 0rem;
+}
+
 #ing-srch-btn-div {
     float: right;
     display: inline-block;
@@ -117,7 +129,7 @@ body {
 
 #hr-find-recipes {
     border: 1px solid black;
-    margin-top: 2rem
+    margin-top: 1rem
 }
 
 #srch-rslts-div {
