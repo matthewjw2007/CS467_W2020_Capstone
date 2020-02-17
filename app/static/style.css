@@ -179,4 +179,5 @@ body {
 
 .save-recipe-btn {
     float: right;
+    margin-top: -75px;
 }
