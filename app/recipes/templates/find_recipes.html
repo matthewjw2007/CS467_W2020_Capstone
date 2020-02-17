@@ -36,6 +36,7 @@
                                 </a>
                                 <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
                                 <p class="recipe-link">Source: <a target="_blank" href={{recipe.URL}}>Link</a></p>
+                                <p class="recipe-rating">{{ recipe.stars }}</p>
                                 <p>
                                     {% if current_user.is_anonymous %}
                                     {% else %}

@@ -173,6 +173,10 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.recipe-rating {
+    text-align: left;
+}
+
 .save-recipe-btn {
     float: right;
 }
