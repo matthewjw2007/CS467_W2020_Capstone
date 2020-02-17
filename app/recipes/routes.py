@@ -31,7 +31,7 @@ def find_recipes():
 
 @bp.route('/view', methods=constants.http_verbs)
 def view_recipe():
-    payload = dict()
+    # payload = dict()
     recipeUrl = request.args.get('url')
     recipe = get_recipe(recipeUrl)
     return render_template('show_recipe.html', payload=recipe)
