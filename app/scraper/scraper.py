@@ -1,11 +1,10 @@
 import sys
 from bs4 import BeautifulSoup # Web scraping 
-from urllib.request import urlopen as urlReq # Open URLs
+from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures # Thread pool
-
 import pprint # Pretty Print to make things print neatly
-
 import time
+from .all_recipes import allrecipe_search  # importing search function from all_recipes.py
 
 
 def get_recipe_list(recipeUrl):
@@ -14,7 +13,7 @@ def get_recipe_list(recipeUrl):
 	htmlRaw = uClient.read()
 	uClient.close()
 
-	# Parse raw HTML 
+	# Parse raw HTML
 	soup = BeautifulSoup(htmlRaw, "html.parser")
 
 	recipeCard = {}
@@ -30,7 +29,7 @@ def get_recipe_list(recipeUrl):
 	recipe_stars = soup.find('span', {'class', 'review-star-text'})
 	recipeCard['stars'] = recipe_stars.text
 
-	# Find image URL store into recipe card. 
+	# Find image URL store into recipe card.
 	imageContainer = soup.find("div", {"class", "image-container"})
 	if imageContainer:
 		imageUrl = imageContainer.div['data-src']
@@ -49,7 +48,7 @@ def get_recipe(recipeUrl):
 	htmlRaw = uClient.read()
 	uClient.close()
 
-	# Parse raw HTML 
+	# Parse raw HTML
 	soup = BeautifulSoup(htmlRaw, "html.parser")
 
 	recipeCard = {}
@@ -61,7 +60,7 @@ def get_recipe(recipeUrl):
 	recipeTitle = soup.find("h1").text
 	recipeCard['title'] = recipeTitle
 
-	# Find image URL store into recipe card. 
+	# Find image URL store into recipe card.
 	imageContainer = soup.find("div", {"class", "image-container"})
 	if imageContainer:
 		imageUrl = imageContainer.div['data-src']
@@ -118,41 +117,9 @@ def get_recipe(recipeUrl):
 	return recipeCard
 
 
-def recipe_search(ingredients):
+def recipe_search(ingredients, websites):
+	print(websites)
 
-	recipeDict = {}
+	recipe_dict = allrecipe_search(ingredients)
 
-	ingredientDict = {}
-
-	# print (f"Contents of recipe_search input: {ingredients}")
-
-	# Search for individual ingredients
-	for item in ingredients:
-
-		# Search a list of recipes on all recipe.com
-		searchUrl = "https://www.allrecipes.com/search/results/?wt=" + item
-		recipeUrlList = urlReq(searchUrl)
-		htmlRaw = recipeUrlList.read()
-		recipeUrlList.close()
-
-		soup = BeautifulSoup(htmlRaw, "html.parser")
-
-		recipeBook = []
-
-		# Get a list of recipes from main search result page
-		recipeUrlList = []
-		recipeBlockContainer = soup.findAll("article", {"class": "fixed-recipe-card"})
-		for recipeBlock in recipeBlockContainer:
-			recipeUrl = recipeBlock.div.a['href']
-			recipeUrlList.append(recipeUrl)
-			
-		with concurrent.futures.ThreadPoolExecutor() as executor:
-			results = [executor.submit(get_recipe_list, recipeUrl) for recipeUrl in recipeUrlList]
-			for f in concurrent.futures.as_completed(results):
-				recipeBook.append(f.result())
-
-		ingredientDict[item] = recipeBook
-
-	recipeDict['allrecipes'] = ingredientDict
-
-	return recipeDict
+	return recipe_dict

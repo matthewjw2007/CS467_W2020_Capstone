@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup  # Web scraping
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
 from .relevance_index import calc_relevance
-
 import pprint  # Pretty Print to make things print neatly
 import time
 
@@ -122,7 +121,7 @@ def get_recipe(recipeUrl):
     return recipeCard
 
 
-def recipe_search(ingredients):
+def allrecipe_search(ingredients):
     recipeDict = {}
 
     ingredientDict = {}

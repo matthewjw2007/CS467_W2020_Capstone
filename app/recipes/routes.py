@@ -15,9 +15,11 @@ bp = Blueprint('recipes', __name__, template_folder='templates')
 def find_recipes():
     form = SearchForm()
     payload = dict()
+    websites = []
     if request.method == 'POST':
         if request.form.get('ingredients') != '':
             if request.form.get('allRecipes') is not None:
+                websites = 'allrecipes'
                 print('All Recipes')
             if request.form.get('foodNetwork') is not None:
                 print('Food Network')
@@ -29,7 +31,7 @@ def find_recipes():
                 if item[-1].isalpha() != True:
                     item = item[:-1]
                 ingredientList.append(item)
-            payload = recipe_search(ingredientList)
+            payload = recipe_search(ingredientList, websites)
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
