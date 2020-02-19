@@ -6,7 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.recipes.search_form import SearchForm
 from app.models import User, Recipes
 from app import db
-from app.scraper.scraper import recipe_search, get_recipe
+from app.scraper.scraper import recipe_search
+from app.scraper.all_recipes import get_recipe
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
 
@@ -19,9 +20,10 @@ def find_recipes():
     if request.method == 'POST':
         if request.form.get('ingredients') != '':
             if request.form.get('allRecipes') is not None:
-                websites = 'allrecipes'
+                websites.append('allrecipes')
                 print('All Recipes')
             if request.form.get('foodNetwork') is not None:
+                websites.append('foodnetwork')
                 print('Food Network')
             if request.form.get('allSites') is not None:
                 print('All Sites')

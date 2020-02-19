@@ -86,7 +86,11 @@ def getRecipe(recipeUrl, searchAry):
     return recipeCard
 
 
-def foodNetworkSearch(searchAry):
+def food_network_search(searchAry):
+    recipe_dict = {}
+
+    ingredient_dict = {}
+
     # Get a list of recipe URLs from main search page
     recipeUrlList = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -101,4 +105,6 @@ def foodNetworkSearch(searchAry):
         for f in concurrent.futures.as_completed(results):
             recipeBook.append(f.result())
 
-    return recipeBook
+    recipe_dict['Food Network'] = recipeBook
+
+    return recipe_dict
