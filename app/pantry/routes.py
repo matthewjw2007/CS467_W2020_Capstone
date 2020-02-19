@@ -6,7 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.recipes.search_form import SearchForm
 from app.models import User, Pantry
 from app import db
-from app.scraper.scraper import recipe_search, get_recipe
 
 bp = Blueprint('pantry', __name__, template_folder='templates')
 
