@@ -6,8 +6,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.recipes.search_form import SearchForm
 from app.models import User, Pantry
 from app import db
+<<<<<<< HEAD
+=======
+from app.scraper.scraper import recipe_search
+from app.scraper.all_recipes import get_recipe
+>>>>>>> 6d326da6168f961d10c8eb684d7f50b54b1ba88b
 
 bp = Blueprint('pantry', __name__, template_folder='templates')
+
 
 @bp.route('/', methods=constants.http_verbs)
 @login_required
