@@ -27,11 +27,13 @@ def create_app():
         from .main.routes import bp as main_bp
         from .users.routes import bp as users_bp
         from .recipes.routes import bp as recipes_bp
+        from .pantry.routes import bp as pantry_bp
 
         db.create_all()
 
         app.register_blueprint(main_bp, url_prefix='/')
         app.register_blueprint(users_bp, url_prefix='/users')
         app.register_blueprint(recipes_bp, url_prefix='/recipes')
+        app.register_blueprint(pantry_bp, url_prefix='/pantry')
 
     return app

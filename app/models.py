@@ -38,7 +38,7 @@ class Pantry(db.Model):
     units_used = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
-        return '<Pantry {}>'.format(self.body)
+        return f'Pantry {self.id}, {self.owner}, {self.name}, {self.quantity}, {self.units_used}'
 
 
 # User loader function used to load a user with a given ID

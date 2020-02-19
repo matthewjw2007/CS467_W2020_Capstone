@@ -60,7 +60,7 @@
                         <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.index') }}">My Pantry</a>
+                        <a class="nav-link" href="{{ url_for('pantry.view_pantry') }}">My Pantry</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('users.get_recipes', user_id=current_user.id) }}">My Recipes</a>

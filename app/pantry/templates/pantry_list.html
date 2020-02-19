@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if payload %}
+    <div id="srch-rslts-div">
+        <h1 id="results-header">Your Pantry</h1>
+        {% if payload.pantry %}
+        <div>
+            <ul>
+                {% for item in payload.pantry %}
+                <li>{{item}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <div>
+            {{payload.message}}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+{% endblock %}
