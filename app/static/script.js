@@ -30,5 +30,11 @@ for(let i=0; i<buttonClass.length; i++){
 let darkModeButton = document.getElementById('dark-mode-btn');
 
 darkModeButton.addEventListener('click', function () {
-    console.log('clicked')
+    if(darkModeButton.innerText === 'Dark Mode'){
+        document.body.style.backgroundColor = "#1b262c";
+        darkModeButton.innerText = 'Light Mode';
+    } else {
+        document.body.style.backgroundColor = "#a3a3c2";
+        darkModeButton.innerText = 'Dark Mode';
+    }
 });
