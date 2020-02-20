@@ -2,13 +2,26 @@
 
 {% block content %}
     {% if payload %}
-    <div id="srch-rslts-div">
-        <h1 id="results-header">Your Pantry</h1>
+    <div id="pantry-div">
+        <h1 id="pantry-header">Your Pantry</h1>
+        <button id="add-items-btn">Add Items To Your Pantry</button>
+        <div id="pantry-form-div">
+        </div>
+        <!--form id="add-item-form">
+            Add Item: <input type="text" class="pantry-item" id="pantry-item-1" placeholder="Enter item here...">
+            <button type="submit">Submit</button>
+            <button id="cancel-btn">Cancel</button>
+        </form-->
         {% if payload.pantry %}
         <div>
+            <form class="hidden-form" id="hidden-form" method="post" action="{{url_for('recipes.find_recipes')}}">
+                <input type="hidden" name="ingredients" value="{% for item in payload.pantry %}{{item.name}}, {% endfor %}">
+                <input type="hidden" name="allRecipes" value="True">
+                <button type="submit">What Can I make?</button>
+            </form>
             <ul>
                 {% for item in payload.pantry %}
-                <li>{{item}}</li>
+                <li>{{item.name}}</li><button type="button" id="delete-btn" onclick="deleteItem({{item.id}});">Remove</button>
                 {% endfor %}
             </ul>
         </div>
@@ -19,5 +32,71 @@
         {% endif %}
     </div>
     {% endif %}
+
+    <script>
+        $(function() {
+            $("#add-items-btn").click(function() {
+                if ($("#add-item-form").is(":visible")) {
+                    $("#add-item-form").remove();
+                    $("#add-items-btn").text("Add Items To Your Pantry");
+                }
+                else {
+                    $("#pantry-form-div").append('<p><form id="add-item-form"><section id="item-entry"><p class="pantry-para" id="pantry-para-1" data-count="1">Add Item: <input type="text" class="pantry-item" id="pantry-item-1" name="item-' + '1' + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-1" onclick="removeItem(1);">Remove</button></p></section><section><button type="button" id="add-item" onclick="addItem();">Add Another Pantry Item</button></section><seciton><button type="submit" onclick="submitForm()">Submit</button></section</form><p>');
+                    $("#add-items-btn").text("Undo add pantry item(s)");
+                }
+            });
+        });
+
+        function removeItem(num) {
+            console.log("Button pressed!");
+            var itemCount = parseInt($(".pantry-para").last().attr('data-count'));
+            console.log(itemCount);
+            if (itemCount == 1) {
+                $("#add-item-form").remove();
+                $("#add-items-btn").text("Add Items To Your Pantry");
+            }
+            else {
+                console.log(num);
+                $("#pantry-para-" + num).remove();
+                var newNum = 1;
+                $(".pantry-para").each(function() {
+                    console.log("newNum is: " + newNum);
+                    $(this).attr("id", "pantry-para-" + newNum);
+                    $(this).attr("data-count", newNum);
+                    newNum++;
+                });
+            }
+        }
+
+        function addItem() {
+            var itemCount = parseInt($(".pantry-para").last().attr('data-count'));
+            itemCount++;
+            console.log(itemCount);
+            $("#item-entry").append('<p class="pantry-para" id="pantry-para-' + itemCount + '"  data-count="' + itemCount + '">Add Item: <input type="text" class="pantry-item" id="pantry-item-' + itemCount + '" name="item-' + itemCount + '" placeholder="Enter item here..."><button type="button" id="cancel-btn" data-item="pantry-item-' + itemCount + '" onclick="removeItem(' + itemCount + ');">Remove</button></p>');
+        };
+
+        function submitForm() {
+            var formData = JSON.stringify($("#add-item-form").serializeArray());
+            console.log(formData);
+            $.ajax({
+                type: "POST",
+                url: "{{url_for('pantry.view_pantry')}}",
+                data: formData,
+                success: function(){},
+                dataType: "json",
+                contentType : "application/json"
+            });
+        };
+
+        function deleteItem(itemId) {
+            $.ajax({
+                url: "/pantry/" + itemId,
+                type: "DELETE",
+                success: function(data, status) {
+                    location.reload(true);
+                }
+            });
+        };
+    </script>
 
 {% endblock %}
