@@ -31,9 +31,9 @@ let darkModeButton = document.getElementById('dark-mode-btn');
 
 darkModeButton.addEventListener('click', function () {
     if(darkModeButton.innerText === 'Dark Mode'){
+        sessionStorage.setItem('darkModeKey', 'on');
         document.body.style.backgroundColor = "#1b262c";
         document.getElementById('main-container').style.backgroundColor = "#3282b8";
-        //document.getElementById('navbarText').style.backgroundColor = "#0f4c75";
         document.getElementById('main-navbar').classList.remove('navbar-light');
         document.getElementById('main-navbar').classList.add('bg-dark');
         document.getElementById('main-navbar').classList.add('navbar-dark');
@@ -43,6 +43,7 @@ darkModeButton.addEventListener('click', function () {
         }
         darkModeButton.innerText = 'Light Mode';
     } else {
+        sessionStorage.setItem('darkModeKey', 'off');
         document.body.style.backgroundColor = "#a3a3c2";
         document.getElementById('main-container').style.backgroundColor = "#ccf2ff";
         document.getElementById('main-navbar').classList.remove('bg-dark');
@@ -55,3 +56,27 @@ darkModeButton.addEventListener('click', function () {
         darkModeButton.innerText = 'Dark Mode';
     }
 });
+
+if(sessionStorage.getItem('darkModeKey') === 'on'){
+    document.body.style.backgroundColor = "#1b262c";
+    document.getElementById('main-container').style.backgroundColor = "#3282b8";
+    document.getElementById('main-navbar').classList.remove('navbar-light');
+    document.getElementById('main-navbar').classList.add('bg-dark');
+    document.getElementById('main-navbar').classList.add('navbar-dark');
+    let links = document.links;
+    for(let i=0; i<links.length; i++){
+        links[i].style.color = "#FFFFFF";
+    }
+    darkModeButton.innerText = 'Light Mode';
+} else {
+    document.body.style.backgroundColor = "#a3a3c2";
+    document.getElementById('main-container').style.backgroundColor = "#ccf2ff";
+    document.getElementById('main-navbar').classList.remove('bg-dark');
+    document.getElementById('main-navbar').classList.remove('navbar-dark');
+    document.getElementById('main-navbar').classList.add('navbar-light');
+    let links = document.links;
+    for(let i=0; i<links.length; i++){
+        links[i].style.color = "#000000";
+    }
+    darkModeButton.innerText = 'Dark Mode';
+}
