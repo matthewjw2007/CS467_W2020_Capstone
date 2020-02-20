@@ -25,3 +25,10 @@ for(let i=0; i<buttonClass.length; i++){
         console.log(recipeURL.href);
     });
 }
+
+// Dark Mode
+let darkModeButton = document.getElementById('dark-mode-btn');
+
+darkModeButton.addEventListener('click', function () {
+    console.log('clicked')
+});
