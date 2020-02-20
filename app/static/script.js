@@ -32,9 +32,11 @@ let darkModeButton = document.getElementById('dark-mode-btn');
 darkModeButton.addEventListener('click', function () {
     if(darkModeButton.innerText === 'Dark Mode'){
         document.body.style.backgroundColor = "#1b262c";
+        document.getElementById('main-container').style.backgroundColor = "#3282b8";
         darkModeButton.innerText = 'Light Mode';
     } else {
         document.body.style.backgroundColor = "#a3a3c2";
+        document.getElementById('main-container').style.backgroundColor = "#ccf2ff";
         darkModeButton.innerText = 'Dark Mode';
     }
 });
