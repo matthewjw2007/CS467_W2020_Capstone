@@ -33,6 +33,7 @@ darkModeButton.addEventListener('click', function () {
     if(darkModeButton.innerText === 'Dark Mode'){
         document.body.style.backgroundColor = "#1b262c";
         document.getElementById('main-container').style.backgroundColor = "#3282b8";
+        //document.getElementById('navbarText').style.backgroundColor = "#0f4c75";
         darkModeButton.innerText = 'Light Mode';
     } else {
         document.body.style.backgroundColor = "#a3a3c2";
