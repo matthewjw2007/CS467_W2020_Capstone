@@ -6,6 +6,10 @@ body {
     background-color: #a3a3c2;
 }
 
+.dark-link {
+    color: white;
+}
+
 .outer-container{
     margin:1em;
     border: 1px solid black;
@@ -40,6 +44,8 @@ body {
 
 .navbar {
     padding: 0;
+    background-color: #e3f2fd;
+    border: 1px solid black;
 }
 
 .nav-link {
