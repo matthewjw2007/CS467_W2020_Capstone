@@ -26,35 +26,33 @@
         <h1 id="results-header">Results</h1>
         <div id="results-div" class="col">
             {% set count = [ ] %}
-            {% for website, ingredients in payload.items() %}
+            {% for website, recipes in payload.items() %}
             <h4 id="website-name">Website: {{website}}</h4>
-                {% for ingredient, recipes in ingredients.items() %}
-                <h5 id="ingredient-name">Ingredient(s): {{ingredient}}</h5>
-                    <hr id="results-hr">
-                    <ol id="results-ol">
+            <h5 id="ingredient-name">Recipe(s):</h5>
+                <hr id="results-hr">
+                <ol id="results-ol">
                     {% for recipe in recipes %}
-                        <li class="li-number">
-                            <form action="{{url_for('users.save_recipe')}}" method="post">
-                                {% set __ = count.append(1) %}
-                                <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.URL}}">
-                                    <p class="rcp-picture"><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
-                                    <p class="recipe-title" id="recipe-title{{count|length}}">Recipe Name: {{recipe.title}}</p>
-                                </a>
-                                <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
-                                <p class="recipe-link">Source: <a target="_blank" href={{recipe.URL}}>Link</a></p>
-                                <p class="recipe-rating">{{ recipe.stars }}</p>
-                                <p>
-                                    {% if current_user.is_anonymous %}
-                                    {% else %}
-                                    <button type="button" class="save-recipe-btn" data-title="recipe-title{{count|length}}" data-url="recipe-url{{count|length}}">Save Recipe</button>
-                                    {% endif %}
-                                </p>
-                                <li id="recipe-url{{count|length}}" hidden>{{recipe.URL}}</li>
-                            </form>
-                        </li>
+                    <li class="li-number">
+                        <form action="{{url_for('users.save_recipe')}}" method="post">
+                            {% set __ = count.append(1) %}
+                            <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.URL}}">
+                                <p class="rcp-picture"><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
+                                <p class="recipe-title" id="recipe-title{{count|length}}">Recipe Name: {{recipe.title}}</p>
+                            </a>
+                            <input type="text" value="{{recipe.title}}" name="recipe-title" hidden>
+                            <p class="recipe-link">Source: <a target="_blank" href={{recipe.URL}}>Link</a></p>
+                            <p class="recipe-rating">{{ recipe.stars }}</p>
+                            <p>
+                                {% if current_user.is_anonymous %}
+                                {% else %}
+                                <button type="button" class="save-recipe-btn" data-title="recipe-title{{count|length}}" data-url="recipe-url{{count|length}}">Save Recipe</button>
+                                {% endif %}
+                            </p>
+                            <li id="recipe-url{{count|length}}" hidden>{{recipe.URL}}</li>
+                        </form>
+                    </li>
                     {% endfor %}
-                    </ol>
-                {% endfor %}
+                </ol>
             {% endfor %}
         </div>
     </div>

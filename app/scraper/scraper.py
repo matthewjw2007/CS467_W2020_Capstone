@@ -9,29 +9,28 @@ from .food_network import food_network_search
 
 
 def recipe_search(ingredients, websites):
-	print(websites)
-
 	main_dict = {}
-
-	# Start timer
-	start = time.perf_counter()
 
 	# Searching sites with multiprocessing
 	with concurrent.futures.ProcessPoolExecutor() as executor:
 		if 'allrecipes' in websites:
-			all_recipe_dict = executor.submit(allrecipe_search, ingredients)
+			query_string = ""
+			for item in ingredients:
+				query_string = query_string + item + ','
+			# remove final comma
+			query_string = query_string[:-1]
+			all_recipe_dict = executor.submit(allrecipe_search, query_string)
 			# Since submit returns a future object and not the result of the function, we need to call .result
 			main_dict.update(all_recipe_dict.result())
 		if 'foodnetwork' in websites:
+			query_string = ""
+			for item in ingredients:
+				query_string = query_string + item + ',-'
+			# remove final dash
+			query_string = query_string[:-1]
+			# remove final comma
+			query_string = query_string[:-1]
 			food_network_dict = executor.submit(food_network_search, ingredients)
 			main_dict.update(food_network_dict.result())
-
-	# Stop timer
-	finish = time.perf_counter()
-
-	total_time = round(finish-start, 2)
-
-	# Calculate search time
-	print("Total Search Time: " + str(total_time) + " seconds")
 
 	return main_dict

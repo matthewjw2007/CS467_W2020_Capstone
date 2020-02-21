@@ -88,27 +88,24 @@ def getRecipe(recipeUrl, searchAry):
 
 def food_network_search(searchAry):
     recipe_dict = {}
-
-    ingredient_dict = {}
-
     for item in searchAry:
-        # Get a list of recipe URLs from main search page
-        recipeUrlList = []
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            results = [executor.submit(getUrls, searchAry[0], page) for page in
-                       range(2)]  ##### Number of pages to search
-            for f in concurrent.futures.as_completed(results):
-                recipeUrlList = recipeUrlList + f.result()
+        pass
+    # Get a list of recipe URLs from main search page
+    recipeUrlList = []
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        results = [executor.submit(getUrls, searchAry[0], page) for page in
+                    range(2)]  ##### Number of pages to search
+        for f in concurrent.futures.as_completed(results):
+            recipeUrlList = recipeUrlList + f.result()
 
-        # Get a recipes from a list of URLs
-        recipeBook = []
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            results = [executor.submit(getRecipe, recipeUrl, searchAry) for recipeUrl in recipeUrlList]
-            for f in concurrent.futures.as_completed(results):
-                recipeBook.append(f.result())
+    # Get a recipes from a list of URLs
+    recipeBook = []
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        results = [executor.submit(getRecipe, recipeUrl, searchAry) for recipeUrl in recipeUrlList]
+        for f in concurrent.futures.as_completed(results):
+            recipeBook.append(f.result())
 
-        ingredient_dict[item] = recipeBook
 
-    recipe_dict['Food Network'] = ingredient_dict
+    recipe_dict['Food Network'] = recipeBook
 
     return recipe_dict
