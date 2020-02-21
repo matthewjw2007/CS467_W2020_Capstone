@@ -21,12 +21,11 @@ def find_recipes():
         if request.form.get('ingredients') != '':
             if request.form.get('allRecipes') is not None:
                 websites.append('allrecipes')
-                print('All Recipes')
             if request.form.get('foodNetwork') is not None:
                 websites.append('foodnetwork')
-                print('Food Network')
-            if request.form.get('allSites') is not None:
-                print('All Sites')
+            if request.form.get('allSites') is not None and request.form.get('allRecipes') is None and request.form.get('foodNetwork') is None:
+                websites.append('allrecipes')
+                websites.append('foodnetwork')
             ingredients = request.form.get('ingredients').split()
             ingredientList = list()
             for item in ingredients:

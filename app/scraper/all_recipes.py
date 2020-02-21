@@ -27,7 +27,11 @@ def get_recipe_list(recipeUrl):
 
     # Find the star rating and store into recipe card - grabbing the value in aria-label
     recipe_stars = soup.find('span', {'class', 'review-star-text'})
-    recipeCard['stars'] = recipe_stars.text
+    if recipe_stars:
+        recipeCard['stars'] = recipe_stars.text
+    else:
+        stars_span = soup.find('span', {'class', 'stars stars-5'})
+        recipeCard['stars'] = stars_span['aria-label']
 
     # Find image URL store into recipe card.
     imageContainer = soup.find("div", {"class", "image-container"})
