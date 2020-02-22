@@ -27,7 +27,7 @@
         <div id="results-div" class="col">
             {% set count = [ ] %}
             {% for website, recipes in payload.items() %}
-            <h4 id="website-name">Website: {{website}}</h4>
+            <h4 id="website-name">Website: {% if website == "food_network" %} FoodNetwork.com {% elif website == "allrecipes" %} AllRecipes.com {% endif %}</h4>
             <h5 id="ingredient-name">Recipe(s):</h5>
                 <hr id="results-hr">
                 <ol id="results-ol">
@@ -35,7 +35,7 @@
                     <li class="li-number">
                         <form action="{{url_for('users.save_recipe')}}" method="post">
                             {% set __ = count.append(1) %}
-                            <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.URL}}">
+                            <a href="{{url_for('recipes.view_recipe')}}?type={{website}}&url={{recipe.URL}}">
                                 <p class="rcp-picture"><img class="recipe-picture" src={{recipe.image}} width="100" height="100"></p>
                                 <p class="recipe-title" id="recipe-title{{count|length}}">Recipe Name: {{recipe.title}}</p>
                             </a>

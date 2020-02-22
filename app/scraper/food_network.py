@@ -7,6 +7,31 @@ from .relevance_index import calc_relevance
 import time  # timing the amount of time required to search
 import pprint  # Pretty Print to make things print neatly
 
+def getRecipeList(recipeUrl):
+    # Opening the connection grabing webpage, store all raw information
+    uClient = urlReq(recipeUrl)
+    htmlRaw = uClient.read()
+    uClient.close()
+
+    # Parse raw HTML
+    soup = BeautifulSoup(htmlRaw, "html.parser")
+
+    recipeCard = {}
+
+    # Store URL into recipe card
+    recipeCard['URL'] = recipeUrl
+
+    # Find title and store into recipe card
+    recipeTitle = soup.find("span", {"class": "o-AssetTitle__a-HeadlineText"}).text
+    recipeCard['title'] = recipeTitle
+
+    # Find image URL store into recipe card.
+    imageContainer = soup.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
+    imageUrl = imageContainer['src']
+    recipeCard['image'] = imageUrl
+
+    # Return single recipe
+    return recipeCard
 
 def getUrls(item, pageNum):
     # Search a few pages from main search result
@@ -27,7 +52,7 @@ def getUrls(item, pageNum):
     return recipeUrlList
 
 
-def getRecipe(recipeUrl, searchAry):
+def getRecipe(recipeUrl):#, searchAry)
     # Opening the connection grabing webpage, store all raw information
     uClient = urlReq(recipeUrl)
     htmlRaw = uClient.read()
@@ -70,9 +95,9 @@ def getRecipe(recipeUrl, searchAry):
         ingredientListAry.append(ingredient)
     recipeCard['ingredients'] = ingredientListAry
 
-    # Find percentage match
-    percentMatch = calc_relevance(searchAry, ingredientListAry)
-    recipeCard['percentMatch'] = percentMatch
+    # # Find percentage match
+    # percentMatch = calc_relevance(searchAry, ingredientListAry)
+    # recipeCard['percentMatch'] = percentMatch
 
     # Find Instructions
     instructionsAry = []
@@ -94,18 +119,18 @@ def food_network_search(searchAry):
     recipeUrlList = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
         results = [executor.submit(getUrls, searchAry[0], page) for page in
-                    range(2)]  ##### Number of pages to search
+                    range(1,3)]  ##### Number of pages to search
         for f in concurrent.futures.as_completed(results):
             recipeUrlList = recipeUrlList + f.result()
 
     # Get a recipes from a list of URLs
     recipeBook = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        results = [executor.submit(getRecipe, recipeUrl, searchAry) for recipeUrl in recipeUrlList]
+        results = [executor.submit(getRecipeList, recipeUrl) for recipeUrl in recipeUrlList]
         for f in concurrent.futures.as_completed(results):
             recipeBook.append(f.result())
 
 
-    recipe_dict['Food Network'] = recipeBook
+    recipe_dict['food_network'] = recipeBook
 
     return recipe_dict

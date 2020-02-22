@@ -8,6 +8,7 @@ from app.models import User, Recipes
 from app import db
 from app.scraper.scraper import recipe_search
 from app.scraper.all_recipes import get_recipe
+from app.scraper.food_network import getRecipe
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
 
@@ -40,7 +41,10 @@ def find_recipes():
 
 @bp.route('/view', methods=constants.http_verbs)
 def view_recipe():
-    # payload = dict()
+    recipeType = request.args.get('type')
     recipeUrl = request.args.get('url')
-    recipe = get_recipe(recipeUrl)
+    if recipeType == 'allrecipes':
+        recipe = get_recipe(recipeUrl)
+    else:
+        recipe = getRecipe(recipeUrl)
     return render_template('show_recipe.html', payload=recipe)
