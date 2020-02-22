@@ -4,8 +4,6 @@ from urllib.request import Request
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
 
-#from relevance_index import calc_relevance
-
 from .relevance_index import calc_relevance
 
 import time  # timing the amount of time required to search
