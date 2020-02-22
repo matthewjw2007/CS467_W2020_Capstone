@@ -2,6 +2,9 @@ import sys
 from bs4 import BeautifulSoup  # Web scraping
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
+
+# from relevance_index import calc_relevance
+
 from .relevance_index import calc_relevance
 import pprint  # Pretty Print to make things print neatly
 import time
@@ -28,7 +31,7 @@ def get_recipe_list(recipeUrl):
     # Find the star rating and store into recipe card - grabbing the value in aria-label
     recipe_stars = soup.find('span', {'class', 'review-star-text'})
     if recipe_stars:
-        recipeCard['stars'] = recipe_stars.text
+        recipeCard['stars'] = recipe_stars.text.strip()
     else:
         stars_span = soup.find('span', {'class', 'stars stars-5'})
         recipeCard['stars'] = stars_span['aria-label']
@@ -46,7 +49,7 @@ def get_recipe_list(recipeUrl):
     return recipeCard
 
 
-def get_recipe(recipeUrl):
+def get_all_recipe(recipeUrl):
     # Opening the connection grabbing webpage, store all raw information
     uClient = urlReq(recipeUrl)
     htmlRaw = uClient.read()

@@ -7,11 +7,11 @@ from app.recipes.search_form import SearchForm
 from app.models import User, Recipes
 from app import db
 from app.scraper.scraper import recipe_search
-from app.scraper.all_recipes import get_recipe
-from app.scraper.food_network import getRecipe
+from app.scraper.all_recipes import get_all_recipe
+from app.scraper.food_network import get_foodnetwork
+from app.scraper.simply_recipes import get_simply_recipe
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
-
 
 @bp.route('/search', methods=constants.http_verbs)
 def find_recipes():
@@ -24,9 +24,12 @@ def find_recipes():
                 websites.append('allrecipes')
             if request.form.get('foodNetwork') is not None:
                 websites.append('foodnetwork')
-            if request.form.get('allSites') is not None and request.form.get('allRecipes') is None and request.form.get('foodNetwork') is None:
+            if request.form.get('simplyRecipes') is not None:
+                websites.append('simplyRecipes')
+            if request.form.get('allSites') is not None and request.form.get('allRecipes') is None and request.form.get('foodNetwork') is None and request.form.get('simplyRecipes') is None:
                 websites.append('allrecipes')
                 websites.append('foodnetwork')
+                websites.append('simplyRecipes')
             ingredients = request.form.get('ingredients').split()
             ingredientList = list()
             for item in ingredients:
@@ -44,7 +47,9 @@ def view_recipe():
     recipeType = request.args.get('type')
     recipeUrl = request.args.get('url')
     if recipeType == 'allrecipes':
-        recipe = get_recipe(recipeUrl)
+        recipe = get_all_recipe(recipeUrl)
+    elif recipeType == 'foodnetwork':
+        recipe = get_foodnetwork(recipeUrl)
     else:
-        recipe = getRecipe(recipeUrl)
+        recipe = get_simply_recipe(recipeUrl)
     return render_template('show_recipe.html', payload=recipe)

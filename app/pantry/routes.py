@@ -7,7 +7,7 @@ from app.recipes.search_form import SearchForm
 from app.models import User, Pantry
 from app import db
 from app.scraper.scraper import recipe_search
-from app.scraper.all_recipes import get_recipe
+from app.scraper.all_recipes import get_all_recipe
 
 bp = Blueprint('pantry', __name__, template_folder='templates')
 

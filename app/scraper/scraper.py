@@ -4,9 +4,16 @@ from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures # Thread pool
 import pprint # Pretty Print to make things print neatly
 import time
+
+# from all_recipes import allrecipe_search  # importing search function from all_recipes.py
+# from food_network import food_network_search
+# from simply_recipes import simply_recipes_search
+# from simply_recipes import getRecipe
+
+# ORIGINAL
 from .all_recipes import allrecipe_search  # importing search function from all_recipes.py
 from .food_network import food_network_search
-
+from .simply_recipes import simply_recipes_search
 
 def recipe_search(ingredients, websites):
 	main_dict = {}
@@ -23,14 +30,26 @@ def recipe_search(ingredients, websites):
 			# Since submit returns a future object and not the result of the function, we need to call .result
 			main_dict.update(all_recipe_dict.result())
 		if 'foodnetwork' in websites:
-			query_string = ""
-			for item in ingredients:
-				query_string = query_string + item + ',-'
-			# remove final dash
-			query_string = query_string[:-1]
-			# remove final comma
-			query_string = query_string[:-1]
+			# query_string = ""
+			# for item in ingredients:
+			# 	query_string = query_string + item + '-'
+			# # remove final dash
+			# query_string = query_string[:-1]
+			# # remove final comma
+			# query_string = query_string[:-1]
 			food_network_dict = executor.submit(food_network_search, ingredients)
 			main_dict.update(food_network_dict.result())
+		if 'simplyrecipes' in websites:
+			simply_recipes_search_dict = executor.submit(simply_recipes_search, ingredients)
+			main_dict.update(simply_recipes_search_dict.result())
 
 	return main_dict
+
+# DEBUG USE
+# if __name__== "__main__":
+# 	ingredients = ["chicken", "noodles"]
+# 	websites = ["simplyrecipes"]
+# 	main_dict = recipe_search(ingredients,websites)
+# 	# pprint.pprint(main_dict)
+# 	result = getRecipe("https://www.simplyrecipes.com/recipes/spicy_thai_soup_with_shrimp/")
+# 	pprint.pprint(result)
