@@ -147,6 +147,7 @@ body {
 }
 
 #website-name {
+    margin-top: 2rem;
     text-align: left;
     font-family: 'Kaushan Script', cursive;
 }
