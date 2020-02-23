@@ -8,6 +8,7 @@ from .relevance_index import calc_relevance
 import time  # timing the amount of time required to search
 import pprint  # Pretty Print to make things print neatly
 
+
 def getRecipeList(recipeUrl):
     # Opening the connection grabing webpage, store all raw information
     uClient = urlReq(recipeUrl)
@@ -26,6 +27,10 @@ def getRecipeList(recipeUrl):
     recipeTitle = soup.find("span", {"class": "o-AssetTitle__a-HeadlineText"}).text
     recipeCard['title'] = recipeTitle
 
+    # Find star rating and store into recipe card
+    recipe_stars = soup.find("span", {"class": "gig-rating-stars"})["title"]
+    recipeCard['stars'] = recipe_stars
+
     # Find image URL store into recipe card.
     imageContainer = soup.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
     if imageContainer:
@@ -36,6 +41,7 @@ def getRecipeList(recipeUrl):
 
     # Return single recipe
     return recipeCard
+
 
 def getUrls(item, pageNum):
     # Search a few pages from main search result
@@ -54,6 +60,7 @@ def getUrls(item, pageNum):
             recipeUrlList.append(recipeUrl)
 
     return recipeUrlList
+
 
 def get_foodnetwork(recipeUrl):
     # Opening the connection grabing webpage, store all raw information
@@ -114,6 +121,7 @@ def get_foodnetwork(recipeUrl):
 
     # Return single recipe
     return recipeCard
+
 
 def food_network_search(searchAry):
     recipe_dict = {}
