@@ -27,7 +27,7 @@
         <div id="results-div" class="col">
             {% set count = [ ] %}
             {% for website, recipes in payload.items() %}
-            <h4 id="website-name">Website: {% if website == "food_network" %} FoodNetwork.com {% elif website == "allrecipes" %} AllRecipes.com {% endif %}</h4>
+            <h4 id="website-name">Website: {% if website == "food_network" %} FoodNetwork.com {% elif website == "allrecipes" %} AllRecipes.com {% elif website == 'simply_recipes' %} SimplyRecipes.com {% endif %}</h4>
             <h5 id="ingredient-name">Recipe(s):</h5>
                 <hr id="results-hr">
                 <ol id="results-ol">

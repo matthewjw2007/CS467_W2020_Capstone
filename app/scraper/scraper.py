@@ -33,7 +33,7 @@ def recipe_search(ingredients, websites):
 			# query_string = query_string[:-1]
 			food_network_dict = executor.submit(food_network_search, ingredients)
 			main_dict.update(food_network_dict.result())
-		if 'simplyrecipes' in websites:
+		if 'simplyRecipes' in websites:
 			simply_recipes_search_dict = executor.submit(simply_recipes_search, ingredients)
 			main_dict.update(simply_recipes_search_dict.result())
 
