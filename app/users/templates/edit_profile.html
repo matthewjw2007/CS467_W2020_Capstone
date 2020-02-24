@@ -19,6 +19,7 @@
             </p>
         </form>
         </div>
+        <a id="2fa-link" href="{{ url_for('users.two_factor_setup', user_id=current_user.id) }}">Setup Two Factor Authentication</a>
         <a id="cancel-link" href="{{ url_for('users.user', username=current_user.username) }}">Cancel</a>
     </div>
 {% endblock %}

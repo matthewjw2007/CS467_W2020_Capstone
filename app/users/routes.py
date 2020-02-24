@@ -1,14 +1,17 @@
 from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
 from flask import current_app as app
+from flask_qrcode import QRcode
 from flask_login import login_user, login_required, logout_user, current_user
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
 from app.users.edit_profile_form import EditProfileForm
+from app.users.two_factor import qrGenerator, getTOTP
 from app.models import User, Recipes
 from app import db
 
 bp = Blueprint('users', __name__, template_folder='templates')
+qrcode = QRcode(app)
 
 
 @bp.route('/user/<username>')
@@ -123,6 +126,16 @@ def login():
         res.status_code = 405
         return res
 
+@bp.route('/<user_id>/2fa_setup', methods=constants.http_verbs)
+@login_required
+def two_factor_setup(user_id):
+    if request.method == 'GET':
+        user = User.query.filter_by(id=user_id).first()
+        user_email = user.email_addr
+        secret = 'DUMMYSECRETDUMMY'
+        payload = 'otpauth://totp/TheNeighborhoodCookbook:' + user_email + '?secret=' + secret + '&issuer=TheNeighborhoodCookbook'
+        qr = qrcode(payload)
+        return render_template('two_factor_setup.html', qr=qr)
 
 @bp.route('/recipes', methods=constants.http_verbs)
 @login_required
