@@ -6,6 +6,15 @@ body {
     background-color: #a3a3c2;
 }
 
+.btn {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.fa-user-minus {
+    margin-left: .5rem;
+}
+
 .dark-link {
     color: white;
 }
