@@ -63,7 +63,7 @@ def getUrls(item, pageNum):
 
 
 def get_foodnetwork(recipeUrl):
-    # Opening the connection grabing webpage, store all raw information
+    # Opening the connection grabbing web page, store all raw information
     uClient = urlReq(recipeUrl)
     htmlRaw = uClient.read()
     uClient.close()
@@ -84,11 +84,15 @@ def get_foodnetwork(recipeUrl):
     recipeCard['title'] = recipeTitle
 
     # Find image URL store into recipe card.
-    if imageContainer:
-        imageUrl = imageContainer['src']
-        recipeCard['image'] = imageUrl
-    else:
-        recipeCard['image'] = ""
+    imageContainer = soup.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
+    imageUrl = imageContainer['src']
+    recipeCard['image'] = imageUrl
+
+    # if imageContainer:
+    #     imageUrl = imageContainer['src']
+    #     recipeCard['image'] = imageUrl
+    # else:
+    #     recipeCard['image'] = ""
 
     # Find metadata of the recipe
     metadataAry = []

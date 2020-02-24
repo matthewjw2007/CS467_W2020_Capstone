@@ -1,17 +1,13 @@
-from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
-from flask import current_app as app
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint, request, render_template
 import constants
-from werkzeug.security import generate_password_hash, check_password_hash
 from app.recipes.search_form import SearchForm
-from app.models import User, Recipes
-from app import db
 from app.scraper.scraper import recipe_search
 from app.scraper.all_recipes import get_all_recipe
 from app.scraper.food_network import get_foodnetwork
 from app.scraper.simply_recipes import get_simply_recipe
 
 bp = Blueprint('recipes', __name__, template_folder='templates')
+
 
 @bp.route('/search', methods=constants.http_verbs)
 def find_recipes():
@@ -26,17 +22,18 @@ def find_recipes():
                 websites.append('foodnetwork')
             if request.form.get('simplyRecipes') is not None:
                 websites.append('simplyRecipes')
-            if request.form.get('allSites') is not None and request.form.get('allRecipes') is None and request.form.get('foodNetwork') is None and request.form.get('simplyRecipes') is None:
+            if request.form.get('allSites') is not None and request.form.get('allRecipes') is None and request.form.get(
+                    'foodNetwork') is None and request.form.get('simplyRecipes') is None:
                 websites.append('allrecipes')
                 websites.append('foodnetwork')
                 websites.append('simplyRecipes')
             ingredients = request.form.get('ingredients').split()
-            ingredientList = list()
+            ingredient_list = list()
             for item in ingredients:
-                if item[-1].isalpha() != True:
+                if not item[-1].isalpha():
                     item = item[:-1]
-                ingredientList.append(item)
-            payload = recipe_search(ingredientList, websites)
+                ingredient_list.append(item)
+            payload = recipe_search(ingredient_list, websites)
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
@@ -44,12 +41,12 @@ def find_recipes():
 
 @bp.route('/view', methods=constants.http_verbs)
 def view_recipe():
-    recipeType = request.args.get('type')
-    recipeUrl = request.args.get('url')
-    if recipeType == 'allrecipes':
-        recipe = get_all_recipe(recipeUrl)
-    elif recipeType == 'foodnetwork':
-        recipe = get_foodnetwork(recipeUrl)
+    recipe_type = request.args.get('type')
+    recipe_url = request.args.get('url')
+    if recipe_type == 'allrecipes':
+        recipe = get_all_recipe(recipe_url)
+    elif recipe_type == 'foodnetwork':
+        recipe = get_foodnetwork(recipe_url)
     else:
-        recipe = get_simply_recipe(recipeUrl)
+        recipe = get_simply_recipe(recipe_url)
     return render_template('show_recipe.html', payload=recipe)
