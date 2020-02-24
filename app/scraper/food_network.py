@@ -127,14 +127,12 @@ def get_foodnetwork(recipeUrl):
     return recipeCard
 
 
-def food_network_search(searchAry):
+def food_network_search(ingredients):
     recipe_dict = {}
-    for item in searchAry:
-        pass
     # Get a list of recipe URLs from main search page
     recipeUrlList = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        results = [executor.submit(getUrls, searchAry[0], page) for page in
+        results = [executor.submit(getUrls, ingredients, page) for page in
                     range(1,3)]  ##### Number of pages to search
         for f in concurrent.futures.as_completed(results):
             recipeUrlList = recipeUrlList + f.result()
