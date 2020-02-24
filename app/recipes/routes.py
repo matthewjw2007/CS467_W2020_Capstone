@@ -45,7 +45,7 @@ def view_recipe():
     recipe_url = request.args.get('url')
     if recipe_type == 'allrecipes':
         recipe = get_all_recipe(recipe_url)
-    elif recipe_type == 'foodnetwork':
+    elif recipe_type == 'food_network':
         recipe = get_foodnetwork(recipe_url)
     else:
         recipe = get_simply_recipe(recipe_url)
