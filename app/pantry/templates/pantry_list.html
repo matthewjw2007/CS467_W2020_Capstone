@@ -14,6 +14,9 @@
         </form-->
         {% if payload.pantry %}
         <div>
+            {{payload.message}}
+        </div>
+        <div>
             <form class="hidden-form" id="hidden-form" method="post" action="{{url_for('recipes.find_recipes')}}">
                 <input type="hidden" name="ingredients" value="{% for item in payload.pantry %}{{item.name}}, {% endfor %}">
                 <input type="hidden" name="allRecipes" value="True">
@@ -41,7 +44,7 @@
                     $("#add-items-btn").text("Add Items To Your Pantry");
                 }
                 else {
-                    $("#pantry-form-div").append('<p><form id="add-item-form"><section id="item-entry"><p class="pantry-para" id="pantry-para-1" data-count="1">Add Item: <input type="text" class="pantry-item" id="pantry-item-1" name="item-' + '1' + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-1" onclick="removeItem(1);">Remove</button></p></section><section><button type="button" id="add-item" onclick="addItem();">Add Another Pantry Item</button></section><seciton><button type="submit" onclick="submitForm()">Submit</button></section</form><p>');
+                    $("#pantry-form-div").append('<p><form id="add-item-form"><section id="item-entry"><p class="pantry-para" id="pantry-para-1" data-count="1">Add Item: <input type="text" class="pantry-item" id="pantry-item-1" name="item-' + '1' + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-1" onclick="removeItem(1);">Remove</button></p></section><section><button type="button" id="add-item" onclick="addItem();">Add Another Pantry Item</button></section><seciton><button type="button" onclick="submitForm()">Submit</button></section</form><p>');
                     $("#add-items-btn").text("Undo add pantry item(s)");
                 }
             });
@@ -77,14 +80,15 @@
 
         function submitForm() {
             var formData = JSON.stringify($("#add-item-form").serializeArray());
-            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "{{url_for('pantry.view_pantry')}}",
                 data: formData,
-                success: function(){},
                 dataType: "json",
-                contentType : "application/json"
+                contentType : "application/json",
+                error: function(error) {
+                    location.reload(true);
+                }
             });
         };
 
@@ -93,7 +97,7 @@
                 url: "/pantry/" + itemId,
                 type: "DELETE",
                 success: function(data, status) {
-                    location.reload(true);
+                    location.href = "{{url_for('pantry.view_pantry')}}";
                 }
             });
         };
