@@ -13,6 +13,8 @@ class User(UserMixin, db.Model):
     email_addr = db.Column(db.String(64), index=True, unique=True, nullable=False)
     password = db.Column(db.String(64))
     last_seen = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    two_factor = db.Column(db.Boolean, default=False)
+    secret = db.Column(db.String(64))
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

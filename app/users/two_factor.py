@@ -2,8 +2,10 @@ import base64
 from time import time
 from hashlib import sha1
 import hmac
+import secrets
+import string
 
-def getTOTP(secret):
+def get_totp(secret):
     # Convert secret
     key = base64.b32decode(secret)
     # Get time interval
@@ -23,3 +25,13 @@ def getTOTP(secret):
         while len(code) < 6:
             code = '0' + code
     return code
+
+def generate_secret():
+    alphabet = string.ascii_letters + string.digits
+    new_string = str()
+    for i in range(40):
+        new_string = new_string + secrets.choice(alphabet)
+    new_string = new_string.encode()
+    b32_string = base64.b32encode(new_string)
+    secret = b32_string.decode()
+    return secret

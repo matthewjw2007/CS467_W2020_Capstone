@@ -6,7 +6,7 @@ import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
 from app.users.edit_profile_form import EditProfileForm
-from app.users.two_factor import qrGenerator, getTOTP
+from app.users.two_factor import get_totp, generate_secret
 from app.models import User, Recipes
 from app import db
 
@@ -25,6 +25,7 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    payload = dict()
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -35,7 +36,12 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email_addr
-    return render_template('edit_profile.html', title='Edit Profile', form=form)
+        user = User.query.filter_by(id=current_user.id).first()
+        if user.two_factor == False:
+            payload['twofa'] = False
+        else:
+            payload['twofa'] = True
+    return render_template('edit_profile.html', title='Edit Profile', form=form, payload=payload)
 
 
 @bp.route('/delete_profile', methods=constants.http_verbs)
@@ -107,6 +113,8 @@ def login():
             # Valid credentials are presented
             if password_is_correct:
                 login_user(user)
+                if user.two_factor == True:
+                    return redirect(url_for('users.two_factor_login', user_id=(current_user.id)))
                 return redirect(url_for('main.index'))
             
             else:
@@ -129,13 +137,69 @@ def login():
 @bp.route('/<user_id>/2fa_setup', methods=constants.http_verbs)
 @login_required
 def two_factor_setup(user_id):
+    payload = dict()
     if request.method == 'GET':
         user = User.query.filter_by(id=user_id).first()
         user_email = user.email_addr
-        secret = 'DUMMYSECRETDUMMY'
-        payload = 'otpauth://totp/TheNeighborhoodCookbook:' + user_email + '?secret=' + secret + '&issuer=TheNeighborhoodCookbook'
-        qr = qrcode(payload)
-        return render_template('two_factor_setup.html', qr=qr)
+        secret = generate_secret()
+        user.secret = secret
+        db.session.commit()
+        totp_code = 'otpauth://totp/TheNeighborhoodCookbook:' + user_email + '?secret=' + secret + '&issuer=TheNeighborhoodCookbook'
+        payload['qr'] = qrcode(totp_code)
+        return render_template('two_factor_setup.html', payload=payload)
+    if request.method == 'POST':
+        entered_code = request.form.get('code')
+        user = User.query.filter_by(id=user_id).first()
+        user_secret = user.secret
+        code = get_totp(user_secret)
+        if code == entered_code:
+            payload['success'] = True
+            user.two_factor = True
+            db.session.commit()
+            return render_template('two_factor_setup.html', payload=payload)
+        else:
+            user = User.query.filter_by(id=user_id).first()
+            user_email = user.email_addr
+            secret = generate_secret()
+            user.secret = secret
+            db.session.commit()
+            totp_code = 'otpauth://totp/TheNeighborhoodCookbook:' + user_email + '?secret=' + secret + '&issuer=TheNeighborhoodCookbook'
+            payload['qr'] = qrcode(totp_code)
+            payload['message'] = 'Incorrect code provided. Please add the new QR code to your Google Authenticator App and enter the 6-digit code within the 30 second lifetime.'
+            return render_template('two_factor_setup.html', payload=payload)
+
+@bp.route('/<user_id>/2fa', methods=constants.http_verbs)
+@login_required
+def two_factor_login(user_id):
+    payload = dict()
+    if request.method == 'GET':
+        return render_template('two_factor_login.html', payload=payload)
+    elif request.method == 'POST':
+        payload = dict()
+        entered_code = request.form.get('code')
+        user = User.query.filter_by(id=user_id).first()
+        user_secret = user.secret
+        code = get_totp(user_secret)
+        if code == entered_code:
+            return redirect(url_for('main.index'))
+        else:
+            payload['message'] = 'Incorrect code provided. Please add the new QR code to your Google Authenticator App and enter the 6-digit code within the 30 second lifetime.'
+            return render_template('two_factor_login.html', payload=payload)
+
+@bp.route('/<user_id>/2fa_remove', methods=constants.http_verbs)
+@login_required
+def two_factor_remove(user_id):
+    if request.method == 'GET':
+        user = User.query.filter_by(id=user_id).first()
+        user.two_factor = False
+        db.session.commit()
+        payload = dict()
+        payload['twofa'] = False
+        payload['message'] = 'Two-factor Authentication has been disabled.'
+        form = EditProfileForm(current_user.username)
+        form.username.data = current_user.username
+        form.email.data = current_user.email_addr
+        return render_template('edit_profile.html', form=form, payload=payload)
 
 @bp.route('/recipes', methods=constants.http_verbs)
 @login_required

@@ -19,7 +19,7 @@ login_helper.login_view = 'users_bp.login'
 def create_app():
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
     app.config.from_object(Config)
-
+    migrate = Migrate(app, db)
     db.init_app(app)
     login_helper.init_app(app)
 
