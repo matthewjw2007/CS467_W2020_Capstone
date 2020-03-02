@@ -7,22 +7,22 @@
         <h5>
             <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
         </h5>
-        <div id="results-div" class="col">
-            <img src="{{payload.image}}" width="500" height="500">
+        <div id="results-div">
+            <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
-        <div>
-            <h3 class="show-recipe-headers">Ingredients</h3>
+        <div class="col">
+            <h3 class="show-recipe-headers">Ingredients</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.ingredients %}
-                <ol>{{item}}</ol>
+                <ol class="show-recipe-lists">{{item}}</ol>
                 {% endfor %}
             </ul>
         </div>
         <div>
-            <h3 class="show-recipe-headers">Directions</h3>
+            <h3 class="show-recipe-headers">Directions</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.instructions %}
-                <ol>{{item}}</ol>
+                <ol class="show-recipe-lists">{{item}}</ol>
                 {% endfor %}
             </ul>
         </div>

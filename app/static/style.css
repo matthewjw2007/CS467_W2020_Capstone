@@ -215,3 +215,20 @@ body {
     text-align: left;
     font-family: 'Kaushan Script', cursive;
 }
+
+.show-recipe-hr {
+    border: 1px solid black;
+    margin-top: .5rem;
+    width: 25%;
+    margin-left: 0;
+}
+
+.show-recipe-lists {
+    text-align: left;
+}
+
+#show-recipe-img {
+    width: 150px;
+    height: 150px;
+    margin-left: 0;
+}
