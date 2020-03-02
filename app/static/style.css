@@ -209,3 +209,9 @@ body {
     float: right;
     margin-top: -75px;
 }
+
+/* Styles for show_recipe */
+.show-recipe-headers {
+    text-align: left;
+    font-family: 'Kaushan Script', cursive;
+}
