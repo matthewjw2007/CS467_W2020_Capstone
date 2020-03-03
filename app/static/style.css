@@ -57,12 +57,92 @@ body {
     border: 1px solid black;
 }
 
+.my-tasks {
+    position: relative;
+}
+
+#dropdown {
+    background-color: silver;
+    color: black;
+    list-style: none;
+    top: 100%;
+    border: black 1px solid;
+}
+
+#dropdown > li {
+    transition: all 0.8s ease;
+}
+
+.dropdown-li:hover {
+    cursor: pointer;
+    background-color: azure;
+}
+
 .nav-link {
     padding: 0;
+    position: relative;
 }
 
 .navbar-text {
     padding-right: 1rem;
+    position: relative;
+}
+
+#dropdown {
+    display: none;
+    position: absolute;
+    width: 200%;
+    padding: 10px 15px;
+    left: 0;
+}
+
+#my-tasks-span.active {
+    background-color: white;
+    color: black;
+}
+
+#dropdown.active {
+    display: block;
+}
+
+#default-li-1 {
+    display: none;
+}
+
+#default-li-1.tasked {
+    display: block;
+    border-bottom: black 1px solid;
+}
+
+#default-li-2 {
+    display: none;
+}
+
+#default-li-2.tasked {
+    display: block;
+    border-bottom: black 1px solid;
+}
+
+#default-li-3 {
+    display: none;
+}
+
+#default-li-3.tasked {
+    display: block;
+    border-bottom: black 1px solid;
+}
+
+#default-li-4 {
+    display: none;
+}
+
+#default-li-4.tasked {
+    display: block;
+    border-bottom: black 1px solid;
+}
+
+#default-li-5 {
+    display: block;
 }
 
 #sticky-footer {
