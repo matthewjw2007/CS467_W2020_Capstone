@@ -7,6 +7,7 @@
         <h5>
             <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
         </h5>
+        <button type="button">Save Recipe</button>
         <div id="results-div">
             <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
@@ -22,7 +23,7 @@
             <h3 class="show-recipe-headers">Directions</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.instructions %}
-                <ol class="show-recipe-lists">{{item}}</ol>
+                <ul class="show-recipe-lists">{{item}}</ul>
                 {% endfor %}
             </ul>
         </div>
