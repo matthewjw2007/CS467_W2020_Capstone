@@ -233,3 +233,9 @@ body {
     margin-top: .5rem;
     margin-left: 0;
 }
+
+/* Styling for my_recipes */
+#my-recipes-main-header {
+    font-family: 'Kaushan Script', cursive;
+    text-align: center;
+}

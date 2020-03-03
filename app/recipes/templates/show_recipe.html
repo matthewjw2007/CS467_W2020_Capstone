@@ -7,7 +7,7 @@
         <h5>
             <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
         </h5>
-        <button type="button">Save Recipe</button>
+        <button type="button" class="save-recipe-button" data-title="recipe-title{{ payload.title }}">Save Recipe</button>
         <div id="results-div">
             <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
@@ -28,6 +28,30 @@
             </ul>
         </div>
     </div>
+        <script>
+        $(function() {
+            $('.save-recipe-button').click(function() {
+                let button = $(this);
+                let TitleObj = $(this).attr('data-title');
+                let URLObj = $(this).attr('data-url');
+                let recipeTitle = $('#' + TitleObj).text();
+                let recipeURL = $('#' + URLObj).text();
+                $.post("/users/recipes", {
+                    title: recipeTitle,
+                    url: recipeURL,
+                    user: {{ current_user.id }}
+                },
+                function(data, status) {
+                    if (status === 'success') {
+                        button.toggle();
+                    }
+                    else {
+                        alert("Error with saving recipe.\nStatus: " + status);
+                    }
+                });
+            });
+        });
+    </script>
     {% endif %}
 
 {% endblock %}
