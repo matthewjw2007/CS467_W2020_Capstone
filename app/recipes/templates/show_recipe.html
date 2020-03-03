@@ -5,9 +5,9 @@
     <div id="srch-rslts-div">
         <h1 id="results-header">{{payload.title}}</h1>
         <h5>
-            <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
+            <a target="_blank" href="{{payload.URL}}">Link to Source Website</a>
         </h5>
-        <button type="button" class="save-recipe-button" data-title="recipe-title{{ payload.title }}">Save Recipe</button>
+        <button type="button" class="save-recipe-button" data-title="{{ payload.title }}" data-url="{{ payload.URL }}">Save Recipe</button>
         <div id="results-div">
             <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
@@ -32,10 +32,9 @@
         $(function() {
             $('.save-recipe-button').click(function() {
                 let button = $(this);
-                let TitleObj = $(this).attr('data-title');
-                let URLObj = $(this).attr('data-url');
-                let recipeTitle = $('#' + TitleObj).text();
-                let recipeURL = $('#' + URLObj).text();
+                let recipeTitle = $(this).attr('data-title');
+                console.log(recipeTitle);
+                let recipeURL = $(this).attr('data-url');
                 $.post("/users/recipes", {
                     title: recipeTitle,
                     url: recipeURL,
