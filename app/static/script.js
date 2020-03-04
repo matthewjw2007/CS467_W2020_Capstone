@@ -80,3 +80,10 @@ if(sessionStorage.getItem('darkModeKey') === 'on'){
     }
     darkModeButton.innerText = 'Dark Mode';
 }
+
+document.getElementById("my-tasks").addEventListener("click", openMenu);
+
+function openMenu() {
+    document.getElementById("dropdown").classList.toggle("active");
+    document.getElementById("my-tasks-span").classList.toggle("active");
+}

@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="form-group" id="recipe-search">
-        <form class="form-group" method="post" action="search">
+        <form class="form-group" method="post" action="{% if current_user.is_anonymous%}{{ url_for('recipes.find_recipes') }}{% else %}{{ url_for('recipes.user_find_recipes', user_id=current_user.id) }}{% endif %}">
             {{ form.hidden_tag() }}
             <p id="find-recipe-search-box">
                 {{ form.ingredients.label }}
@@ -23,12 +23,12 @@
         <hr id="hr-find-recipes">
     </div>
 
-    {% if payload %}
+    {% if payload.results %}
     <div id="srch-rslts-div">
         <h1 id="results-header">Results</h1>
         <div id="results-div" class="col">
             {% set count = [ ] %}
-            {% for website, recipes in payload.items() %}
+            {% for website, recipes in payload.results.items() %}
             <h4 id="website-name">Website: {% if website == "food_network" %} FoodNetwork.com {% elif website == "allrecipes" %} AllRecipes.com {% elif website == 'simply_recipes' %} SimplyRecipes.com {% endif %}</h4>
             <h5 id="ingredient-name">Recipe(s):</h5>
                 <hr id="results-hr">
@@ -83,6 +83,18 @@
             });
         });
     </script>
+
+    {% elif payload.message %}
+
+            <div id="srch-rslts-div">
+                <h1 id="results-header">Your search has begun!</h1>
+                <p>
+                    {{payload.message}}
+                    
+                    Please check for the results of the search under "My Tasks" on the right side of the Navigation Bar.
+                </p>
+            </div>
+    {% else %}
     {% endif %}
 
 {% endblock %}
