@@ -37,10 +37,11 @@ class Recipes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_name = db.Column(db.String(120), index=True, nullable=False)
     source_url = db.Column(db.String(1028), nullable=False)
+    type_recipe = db.Column(db.String(120))
     added_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return f'Recipe {self.id}, {self.recipe_name}, {self.source_url}, {self.added_by}'
+        return f'Recipe {self.id}, {self.recipe_name}, {self.source_url}, {self.added_by}, {self.type_recipe}'
 
 
 # User's ingredients/pantry table
