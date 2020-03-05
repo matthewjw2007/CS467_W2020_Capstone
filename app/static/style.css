@@ -235,6 +235,7 @@ body {
 
 /* Styles for my_recipes */
 #my-recipes-header {
+    text-align: center;
     font-family: 'Kaushan Script', cursive;
 }
 
@@ -246,4 +247,10 @@ body {
 
 .recipe-link-my-recipes {
     text-align: left;
+}
+
+.del-recipe-btn {
+    float: right;
+    margin-top: -50px;
+    margin-right: 1rem;
 }

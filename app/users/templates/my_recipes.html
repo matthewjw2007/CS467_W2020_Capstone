@@ -3,8 +3,8 @@
 {% block content %}
     {% if recipes %}
     {% set count = [ ] %}
-    <div id="my-recipes-main-div">
         <h1 id="my-recipes-header">My Recipes</h1><hr id="my-recipes-hr">
+    <div id="my-recipes-main-div">
         <div id="results-div">
             {% for recipe in recipes %}
             {% set __ = count.append(1) %}
