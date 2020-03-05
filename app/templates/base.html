@@ -126,66 +126,6 @@
     <script src="https://kit.fontawesome.com/b74989739b.js" crossorigin="anonymous"></script>
     {% if current_user.is_anonymous %}
     {% else %}
-    <!--script>
-        $(function() {
-            // Get number of searches active
-            $.ajax({
-                type: 'GET',
-                url: "{{url_for('recipes.num_jobs', user_id=current_user.id)}}",
-                success: function(data, status, request) {
-                    console.log(data);
-                    if (data['num_jobs'] == '0') {
-                        $('#default-li-5').text("You don't have any searches active at this time.");
-                    }
-                    else {
-                        updateTasks();
-                    }
-                }
-            });
-        })
-
-        function updateTasks() {
-            $.ajax({
-                type: 'GET',
-                url: "{{url_for('recipes.users_searches', user_id=current_user.id)}}",
-                success: function(data, status, request) {
-                    console.log(data);
-                    var taskArr = data['tasks'];
-                    $('.tasked').removeClass("tasked");
-                    if (taskArr.length == 0) {
-                        $('#default-li-5').text("You don't have any searches active at this time.");
-                    } 
-                    else {
-                        for (let i = 0; i < taskArr.length; i++) {
-                            console.log('Task_id is: ' + taskArr[i]['task_id']);
-                            var task_id = taskArr[i]['task_id'];
-                            if (i == (taskArr.length - 1)) {
-                                if (taskArr[i]['status'] == 'finished') {
-                                    $('#default-li-5').html("<a href='/recipes/search/{{current_user.id}}/current_searches/" + task_id + "'>" + taskArr[i]['search_string'] + "\nStatus: " + taskArr[i]['status'] + "</a>");
-                                }
-                                else {
-                                    $('#default-li-5').text(taskArr[i]['search_string'] + "\nStatus: " + taskArr[i]['status']);
-                                }
-                            }
-                            else {
-                                if (taskArr[i]['status'] == 'finished') {
-                                    $('#default-li-' + (i + 1)).html("<a href='/recipes/search/{{current_user.id}}/current_searches/" + task_id + "'>" + taskArr[i]['search_string'] + "\nStatus: " + taskArr[i]['status'] + "</a>");
-                                }
-                                else {
-                                    $('#default-li-' + (i + 1)).text(taskArr[i]['search_string'] + "\nStatus: " + taskArr[i]['status']);
-                                }
-                                $('#default-li-' + (i + 1)).addClass("tasked");
-                            }
-                        }
-                        setTimeout(function() {
-                            console.log("Checking status again...");
-                            updateTasks();
-                        }, 2000);
-                    }
-                }
-            })
-        }
-    </script-->
     {% endif %}
 </body>
 </html>
