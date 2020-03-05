@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Blueprint, request, render_template, jsonify, current_app
 from flask_login import login_required, current_user
 import constants
 from app.recipes.search_form import SearchForm
@@ -7,7 +7,7 @@ from app.scraper.all_recipes import get_all_recipe
 from app.scraper.food_network import get_foodnetwork
 from app.scraper.simply_recipes import get_simply_recipe
 from app.models import User
-from app import db, r, q
+from app import db
 import rq
 from rq.job import Job
 
@@ -51,7 +51,7 @@ def user_find_recipes(user_id):
     websites = []
     if request.method == 'POST':
         if request.form.get('ingredients') != '':
-            jobs = q.jobs
+            jobs = current_app.task_queue.jobs
             if request.form.get('allRecipes') is not None:
                 websites.append('allrecipes')
             if request.form.get('foodNetwork') is not None:
@@ -72,7 +72,7 @@ def user_find_recipes(user_id):
                     item = item[:-1]
                 ingredient_list.append(item)
             user = User.query.filter_by(id=user_id).first()
-            task = q.enqueue(recipe_search, ingredient_list, websites, failure_ttl=60)
+            task = current_app.task_queue.enqueue(recipe_search, ingredient_list, websites, failure_ttl=60)
             assign_task(user, task.id, search_string)
             payload = {
                 'task_id': task.id,
@@ -87,7 +87,7 @@ def user_find_recipes(user_id):
 @login_required
 def view_search_results(user_id, task_id):
     form = SearchForm()
-    task = Job.fetch(task_id, connection=r)
+    task = Job.fetch(task_id, connection=current_app.redis)
     user = User.query.filter_by(id=user_id).first()
     payload = dict()
     payload['results'] = task.result
@@ -183,7 +183,7 @@ def update_tasks(user):
     # Clean up current searches
     if user.search_id_1 is not None:
         try:
-            task = Job.fetch(user.search_id_1, connection=r)
+            task = Job.fetch(user.search_id_1, connection=current_app.redis)
         except rq.exceptions.NoSuchJobError:
             user.search_id_1 = None
             user.search_string_1 = None
@@ -192,7 +192,7 @@ def update_tasks(user):
     
     if user.search_id_2 is not None:
         try:
-            task = Job.fetch(user.search_id_2, connection=r)
+            task = Job.fetch(user.search_id_2, connection=current_app.redis)
         except rq.exceptions.NoSuchJobError:
             user.search_id_2 = None
             user.search_string_2 = None
@@ -201,7 +201,7 @@ def update_tasks(user):
 
     if user.search_id_3 is not None:
         try:
-            task = Job.fetch(user.search_id_3, connection=r)
+            task = Job.fetch(user.search_id_3, connection=current_app.redis)
         except rq.exceptions.NoSuchJobError:
             user.search_id_3 = None
             user.search_string_3 = None
@@ -210,7 +210,7 @@ def update_tasks(user):
 
     if user.search_id_4 is not None:
         try:
-            task = Job.fetch(user.search_id_4, connection=r)
+            task = Job.fetch(user.search_id_4, connection=current_app.redis)
         except rq.exceptions.NoSuchJobError:
             user.search_id_4 = None
             user.search_string_4 = None
@@ -219,7 +219,7 @@ def update_tasks(user):
 
     if user.search_id_5 is not None:
         try:
-            task = Job.fetch(user.search_id_5, connection=r)
+            task = Job.fetch(user.search_id_5, connection=current_app.redis)
         except rq.exceptions.NoSuchJobError:
             user.search_id_5 = None
             user.search_string_5 = None
@@ -359,7 +359,7 @@ def get_tasks(user):
     if user.search_id_1 is not None:
         message = dict()
         try:
-            task = Job.fetch(user.search_id_1, connection=r)
+            task = Job.fetch(user.search_id_1, connection=current_app.redis)
             message['status'] = task.get_status()
             message['task_id'] = user.search_id_1
             message['search_string'] = user.search_string_1
@@ -380,7 +380,7 @@ def get_tasks(user):
     if user.search_id_2 is not None:
         message = dict()
         try:
-            task = Job.fetch(user.search_id_2, connection=r)
+            task = Job.fetch(user.search_id_2, connection=current_app.redis)
             message['status'] = task.get_status()
             message['task_id'] = user.search_id_2
             message['search_string'] = user.search_string_2
@@ -401,7 +401,7 @@ def get_tasks(user):
     if user.search_id_3 is not None:
         message = dict()
         try:
-            task = Job.fetch(user.search_id_3, connection=r)
+            task = Job.fetch(user.search_id_3, connection=current_app.redis)
             message['status'] = task.get_status()
             message['task_id'] = user.search_id_3
             message['search_string'] = user.search_string_3
@@ -422,7 +422,7 @@ def get_tasks(user):
     if user.search_id_4 is not None:
         message = dict()
         try:
-            task = Job.fetch(user.search_id_4, connection=r)
+            task = Job.fetch(user.search_id_4, connection=current_app.redis)
             message['status'] = task.get_status()
             message['task_id'] = user.search_id_4
             message['search_string'] = user.search_string_4
@@ -442,7 +442,7 @@ def get_tasks(user):
     if user.search_id_5 is not None:
         message = dict()
         try:
-            task = Job.fetch(user.search_id_5, connection=r)
+            task = Job.fetch(user.search_id_5, connection=current_app.redis)
             message['status'] = task.get_status()
             message['task_id'] = user.search_id_5
             message['search_string'] = user.search_string_5
