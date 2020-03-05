@@ -19,7 +19,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div>
+        <div class="col">
             <h3 class="show-recipe-headers">Directions</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.instructions %}
@@ -33,7 +33,7 @@
             $('.save-recipe-button').click(function() {
                 let button = $(this);
                 let recipeTitle = $(this).attr('data-title');
-                console.log(recipeTitle);
+                //console.log($(this).attr('data-rating'));
                 let recipeURL = $(this).attr('data-url');
                 $.post("/users/recipes", {
                     title: recipeTitle,
