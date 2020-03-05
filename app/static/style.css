@@ -232,3 +232,18 @@ body {
     height: 150px;
     margin-left: 0;
 }
+
+/* Styles for my_recipes */
+#my-recipes-header {
+    font-family: 'Kaushan Script', cursive;
+}
+
+#my-recipes-hr {
+    border: 1px solid black;
+    width: 25%;
+    margin-top: .5rem;
+}
+
+.recipe-link-my-recipes {
+    text-align: left;
+}
