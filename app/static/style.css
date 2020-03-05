@@ -314,8 +314,24 @@ body {
     margin-left: 0;
 }
 
-/* Styling for my_recipes */
-#my-recipes-main-header {
-    font-family: 'Kaushan Script', cursive;
+/* Styles for my_recipes */
+#my-recipes-header {
     text-align: center;
+    font-family: 'Kaushan Script', cursive;
+}
+
+#my-recipes-hr {
+    border: 1px solid black;
+    width: 25%;
+    margin-top: .5rem;
+}
+
+.recipe-link-my-recipes {
+    text-align: left;
+}
+
+.del-recipe-btn {
+    float: right;
+    margin-top: -50px;
+    margin-right: 1rem;
 }
