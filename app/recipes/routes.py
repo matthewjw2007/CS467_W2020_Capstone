@@ -130,33 +130,28 @@ def view_recipe():
 
 def assign_task(user, task_id, search_string):
     num_tasks = user.num_searches
-    #last_search = user.most_recent_search
+
     if num_tasks <= 4:
         if num_tasks == 0:
             user.search_id_1 = task_id
             user.search_string_1 = search_string
-            print (f"Adding task: {task_id} to user.search_id_1")
-            print (f"user.search_id_1 is now: {user.search_id_1}")
+
         elif num_tasks == 1:
             user.search_id_2 = task_id
             user.search_string_2 = search_string
-            print (f"Adding task: {task_id} to user.search_id_2")
-            print (f"user.search_id_2 is now: {user.search_id_2}")
+
         elif num_tasks == 2:
             user.search_id_3 = task_id
             user.search_string_3 = search_string
-            print (f"Adding task: {task_id} to user.search_id_3")
-            print (f"user.search_id_3 is now: {user.search_id_3}")
+
         elif num_tasks == 3:
             user.search_id_4 = task_id
             user.search_string_4 = search_string
-            print (f"Adding task: {task_id} to user.search_id_4")
-            print (f"user.search_id_4 is now: {user.search_id_4}")
+
         else:
             user.search_id_5 = task_id
             user.search_string_5 = search_string
-            print (f"Adding task: {task_id} to user.search_id_5")
-            print (f"user.search_id_5 is now: {user.search_id_5}")
+
         user.num_searches = num_tasks + 1
     else:
         user.search_id_1 = user.search_id_2
@@ -172,229 +167,190 @@ def assign_task(user, task_id, search_string):
     db.session.commit()
 
 def update_tasks(user):
-    print("Running update_tasks")
-    num_tasks = user.num_searches
-    print(f"Num tasks is: {num_tasks}")
+    # Get current number of searches
+    num_tasks = 0
+    if user.search_id_1 is not None:
+        num_tasks = num_tasks + 1
+    if user.search_id_2 is not None:
+        num_tasks = num_tasks + 1
+    if user.search_id_3 is not None:
+        num_tasks = num_tasks + 1
+    if user.search_id_4 is not None:
+        num_tasks = num_tasks + 1
+    if user.search_id_5 is not None:
+        num_tasks = num_tasks + 1
+
     # Clean up current searches
-    print ("Printing search_id_1")
-    print(f"search_id_1 is: {user.search_id_1}")
-    print(f"search_string_1 is: {user.search_string_1}")
     if user.search_id_1 is not None:
         try:
             task = Job.fetch(user.search_id_1, connection=r)
-            print (task)
         except rq.exceptions.NoSuchJobError:
-        #if task is None:
-            print("Exception for search 1 thrown")
             user.search_id_1 = None
             user.search_string_1 = None
-            user.num_searches = num_tasks - 1
+            num_tasks = num_tasks - 1
             db.session.commit()
-    print ("Printing search_id_2")
-    print(f"search_id_2 is: {user.search_id_2}")
-    print(f"search_string_2 is: {user.search_string_2}")
+    
     if user.search_id_2 is not None:
         try:
             task = Job.fetch(user.search_id_2, connection=r)
         except rq.exceptions.NoSuchJobError:
-        #if task is None:
-            print("Exception for search 2 thrown")
             user.search_id_2 = None
             user.search_string_2 = None
-            user.num_searches = num_tasks - 1
+            num_tasks = num_tasks - 1
             db.session.commit()
-    print ("Printing search_id_3")
-    print(f"search_id_3 is: {user.search_id_3}")
-    print(f"search_string_3 is: {user.search_string_3}")
+
     if user.search_id_3 is not None:
         try:
             task = Job.fetch(user.search_id_3, connection=r)
-        #if task is None:
         except rq.exceptions.NoSuchJobError:
-            print("Exception for search 3 thrown")
             user.search_id_3 = None
             user.search_string_3 = None
-            user.num_searches = num_tasks - 1
+            num_tasks = num_tasks - 1
             db.session.commit()
-    print ("Printing search_id_4")
-    print(f"search_id_4 is: {user.search_id_4}")
-    print(f"search_string_4 is: {user.search_string_4}")
+
     if user.search_id_4 is not None:
         try:
             task = Job.fetch(user.search_id_4, connection=r)
         except rq.exceptions.NoSuchJobError:
-        #if task is None:
-            print("Exception for search 4 thrown")
             user.search_id_4 = None
             user.search_string_4 = None
-            user.num_searches = num_tasks - 1
+            num_tasks = num_tasks - 1
             db.session.commit()
-    print ("Printing search_id_5")
-    print(f"search_id_5 is: {user.search_id_5}")
-    print(f"search_string_5 is: {user.search_string_5}")
+
     if user.search_id_5 is not None:
         try:
             task = Job.fetch(user.search_id_5, connection=r)
         except rq.exceptions.NoSuchJobError:
-        #if task is None:
-            print("Exception for search 5 thrown")
             user.search_id_5 = None
             user.search_string_5 = None
-            user.num_searches = num_tasks - 1
+            num_tasks = num_tasks - 1
             db.session.commit()
+
     # update search queue
+    user.num_searches = num_tasks
+    db.session.commit()
     update_cascade(user)
 
 def update_cascade(user):
     if user.num_searches == 1:
-        i = 1
         while user.search_id_1 is None:
-            if i == 1:
-                if user.search_id_1 is None and user.search_id_2 is not None:
-                    user.search_id_1 = user.search_id_2
-                    user.search_string_1 = user.search_string_2
-                    user.search_id_2 = None
-                    user.search_string_2 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 2:
-                if user.search_id_2 is None and user.search_id_3 is not None:
-                    user.search_id_2 = user.search_id_3
-                    user.search_string_3 = user.search_string_3
-                    user.search_id_3 = None
-                    user.search_string_3 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 3:
-                if user.search_id_3 is None and user.search_id_4 is not None:
-                    user.search_id_3 = user.search_id_4
-                    user.search_string_3 = user.search_string_4
-                    user.search_id_4 = None
-                    user.search_string_4 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 4:
-                if user.search_id_4 is None and user.search_id_5 is not None:
-                    user.search_id_4 = user.search_id_5
-                    user.search_string_4 = user.search_string_5
-                    user.search_id_5 = None
-                    user.search_string_5 = None
-                    db.session.commit()
-                    i = i + 1
-            else:
-                i = 1
-    elif user.num_searches == 2:
-        i = 1
-        while user.search_id_1 is None or user.search_id_2 is None:
-            if i == 1:
-                if user.search_id_1 is None and user.search_id_2 is not None:
-                    user.search_id_1 = user.search_id_2
-                    user.search_string_1 = user.search_string_2
-                    user.search_id_2 = None
-                    user.search_string_2 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 2:
-                if user.search_id_2 is None and user.search_id_3 is not None:
-                    user.search_id_2 = user.search_id_3
-                    user.search_string_3 = user.search_string_3
-                    user.search_id_3 = None
-                    user.search_string_3 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 3:
-                if user.search_id_3 is None and user.search_id_4 is not None:
-                    user.search_id_3 = user.search_id_4
-                    user.search_string_3 = user.search_string_4
-                    user.search_id_4 = None
-                    user.search_string_4 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 4:
-                if user.search_id_4 is None and user.search_id_5 is not None:
-                    user.search_id_4 = user.search_id_5
-                    user.search_string_4 = user.search_string_5
-                    user.search_id_5 = None
-                    user.search_string_5 = None
-                    db.session.commit()
-                    i = i + 1
-            else:
-                i = 1
-    elif user.num_searches == 3:
-        i = 1
-        while user.search_id_1 is None or user.search_id_2 is None or user.search_id_3 is None:
-            if i == 1:
-                if user.search_id_1 is None and user.search_id_2 is not None:
-                    user.search_id_1 = user.search_id_2
-                    user.search_string_1 = user.search_string_2
-                    user.search_id_2 = None
-                    user.search_string_2 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 2:
-                if user.search_id_2 is None and user.search_id_3 is not None:
-                    user.search_id_2 = user.search_id_3
-                    user.search_string_3 = user.search_string_3
-                    user.search_id_3 = None
-                    user.search_string_3 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 3:
-                if user.search_id_3 is None and user.search_id_4 is not None:
-                    user.search_id_3 = user.search_id_4
-                    user.search_string_3 = user.search_string_4
-                    user.search_id_4 = None
-                    user.search_string_4 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 4:
-                if user.search_id_4 is None and user.search_id_5 is not None:
-                    user.search_id_4 = user.search_id_5
-                    user.search_string_4 = user.search_string_5
-                    user.search_id_5 = None
-                    user.search_string_5 = None
-                    db.session.commit()
-                    i = i + 1
-            else:
-                i = 1
-    elif user.num_searches == 4:
-        i = 1
-        while user.search_id_1 is None or user.search_id_2 is None or user.search_id_3 is None or user.search_id_4 is None:
-            if i == 1:
-                if user.search_id_1 is None and user.search_id_2 is not None:
-                    user.search_id_1 = user.search_id_2
-                    user.search_string_1 = user.search_string_2
-                    user.search_id_2 = None
-                    user.search_string_2 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 2:
-                if user.search_id_2 is None and user.search_id_3 is not None:
-                    user.search_id_2 = user.search_id_3
-                    user.search_string_3 = user.search_string_3
-                    user.search_id_3 = None
-                    user.search_string_3 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 3:
-                if user.search_id_3 is None and user.search_id_4 is not None:
-                    user.search_id_3 = user.search_id_4
-                    user.search_string_3 = user.search_string_4
-                    user.search_id_4 = None
-                    user.search_string_4 = None
-                    db.session.commit()
-                    i = i + 1
-            elif i == 4:
-                if user.search_id_4 is None and user.search_id_5 is not None:
-                    user.search_id_4 = user.search_id_5
-                    user.search_string_4 = user.search_string_5
-                    user.search_id_5 = None
-                    user.search_string_5 = None
-                    db.session.commit()
-                    i = i + 1
-            else:
-                i = 1
+            if user.search_id_1 is None and user.search_id_2 is not None:
+                user.search_id_1 = user.search_id_2
+                user.search_string_1 = user.search_string_2
+                user.search_id_2 = None
+                user.search_string_2 = None
+                db.session.commit()
 
+            if user.search_id_2 is None and user.search_id_3 is not None:
+                user.search_id_2 = user.search_id_3
+                user.search_string_2 = user.search_string_3
+                user.search_id_3 = None
+                user.search_string_3 = None
+                db.session.commit()
+
+            if user.search_id_3 is None and user.search_id_4 is not None:
+                user.search_id_3 = user.search_id_4
+                user.search_string_3 = user.search_string_4
+                user.search_id_4 = None
+                user.search_string_4 = None
+                db.session.commit()
+
+            if user.search_id_4 is None and user.search_id_5 is not None:
+                user.search_id_4 = user.search_id_5
+                user.search_string_4 = user.search_string_5
+                user.search_id_5 = None
+                user.search_string_5 = None
+                db.session.commit()
+
+    elif user.num_searches == 2:
+        while user.search_id_1 is None or user.search_id_2 is None:
+            if user.search_id_1 is None and user.search_id_2 is not None:
+                user.search_id_1 = user.search_id_2
+                user.search_string_1 = user.search_string_2
+                user.search_id_2 = None
+                user.search_string_2 = None
+                db.session.commit()
+
+            if user.search_id_2 is None and user.search_id_3 is not None:
+                user.search_id_2 = user.search_id_3
+                user.search_string_2 = user.search_string_3
+                user.search_id_3 = None
+                user.search_string_3 = None
+                db.session.commit()
+
+            if user.search_id_3 is None and user.search_id_4 is not None:
+                user.search_id_3 = user.search_id_4
+                user.search_string_3 = user.search_string_4
+                user.search_id_4 = None
+                user.search_string_4 = None
+                db.session.commit()
+
+            if user.search_id_4 is None and user.search_id_5 is not None:
+                user.search_id_4 = user.search_id_5
+                user.search_string_4 = user.search_string_5
+                user.search_id_5 = None
+                user.search_string_5 = None
+                db.session.commit()
+
+    elif user.num_searches == 3:
+        while user.search_id_1 is None or user.search_id_2 is None or user.search_id_3 is None:
+            if user.search_id_1 is None and user.search_id_2 is not None:
+                user.search_id_1 = user.search_id_2
+                user.search_string_1 = user.search_string_2
+                user.search_id_2 = None
+                user.search_string_2 = None
+                db.session.commit()
+
+            if user.search_id_2 is None and user.search_id_3 is not None:
+                user.search_id_2 = user.search_id_3
+                user.search_string_2 = user.search_string_3
+                user.search_id_3 = None
+                user.search_string_3 = None
+                db.session.commit()
+
+            if user.search_id_3 is None and user.search_id_4 is not None:
+                user.search_id_3 = user.search_id_4
+                user.search_string_3 = user.search_string_4
+                user.search_id_4 = None
+                user.search_string_4 = None
+                db.session.commit()
+
+            if user.search_id_4 is None and user.search_id_5 is not None:
+                user.search_id_4 = user.search_id_5
+                user.search_string_4 = user.search_string_5
+                user.search_id_5 = None
+                user.search_string_5 = None
+                db.session.commit()
+
+    elif user.num_searches == 4:
+        while user.search_id_1 is None or user.search_id_2 is None or user.search_id_3 is None or user.search_id_4 is None:
+            if user.search_id_1 is None and user.search_id_2 is not None:
+                user.search_id_1 = user.search_id_2
+                user.search_string_1 = user.search_string_2
+                user.search_id_2 = None
+                user.search_string_2 = None
+                db.session.commit()
+
+            if user.search_id_2 is None and user.search_id_3 is not None:
+                user.search_id_2 = user.search_id_3
+                user.search_string_2 = user.search_string_3
+                user.search_id_3 = None
+                user.search_string_3 = None
+                db.session.commit()
+
+            if user.search_id_3 is None and user.search_id_4 is not None:
+                user.search_id_3 = user.search_id_4
+                user.search_string_3 = user.search_string_4
+                user.search_id_4 = None
+                user.search_string_4 = None
+                db.session.commit()
+
+            if user.search_id_4 is None and user.search_id_5 is not None:
+                user.search_id_4 = user.search_id_5
+                user.search_string_4 = user.search_string_5
+                user.search_id_5 = None
+                user.search_string_5 = None
+                db.session.commit()
 
 def get_tasks(user):
     payload = dict()
