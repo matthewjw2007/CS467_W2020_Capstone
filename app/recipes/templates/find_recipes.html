@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="form-group" id="recipe-search">
-        <form onsubmit="submitForm(this)" class="form-group" method="post" action="{% if current_user.is_anonymous%}{{ url_for('recipes.find_recipes') }}{% else %}{{ url_for('recipes.user_find_recipes', user_id=current_user.id) }}{% endif %}">
+        <form class="form-group" method="post" action="{% if current_user.is_anonymous%}{{ url_for('recipes.find_recipes') }}{% else %}{{ url_for('recipes.user_find_recipes', user_id=current_user.id) }}{% endif %}">
             {{ form.hidden_tag() }}
             <p id="find-recipe-search-box">
                 {{ form.ingredients.label }}
@@ -97,36 +97,5 @@
             </div>
     {% else %}
     {% endif %}
-    <script>
-        function submitForm(form) {
-            var num_jobs = 0;
-            $.ajax({
-                type: 'GET',
-                url: "{{url_for('recipes.num_jobs', user_id=current_user.id)}}",
-                success: function(data, status, request) {
-                    alert('Success!');
-                    setTimeout('', 5000);
-                    console.log(data);
-                    num_jobs = data['num_jobs'];
-                    setTimeout('', 5000);
-                    console.log(num_jobs);
-                },
-                error: function(data) {
-                    num_jobs = data['num_jobs'];
-                }
-            });
-            console.log(num_jobs);
-            setTimeout('', 5000);
-            if (num_jobs == 5) {
-                var r = confirm("You have the maximum amount of searches queued. \nClicking 'OK' will queue this search and remove your oldest search from the \ndatabase and you will no longer have access to its results. \nClicking cancel will abort the search queue request.");
-                setTimeout('', 5000);
-                return r;
-            }
-            else {
-                setTimeout('', 5000);
-                return true;
-            }
-        }
-    </script>
 
 {% endblock %}
