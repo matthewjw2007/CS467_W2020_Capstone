@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="form-group" id="recipe-search">
-        <form class="form-group" method="post" action="{% if current_user.is_anonymous%}{{ url_for('recipes.find_recipes') }}{% else %}{{ url_for('recipes.user_find_recipes', user_id=current_user.id) }}{% endif %}">
+        <form class="form-group" method="post" action="{{ url_for('recipes.find_recipes') }}">
             {{ form.hidden_tag() }}
             <p id="find-recipe-search-box">
                 {{ form.ingredients.label }}
