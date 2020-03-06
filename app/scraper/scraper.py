@@ -24,14 +24,14 @@ def recipe_search(ingredients, websites):
 			# Since submit returns a future object and not the result of the function, we need to call .result
 			main_dict.update(all_recipe_dict.result())
 		if 'foodnetwork' in websites:
-			# query_string = ""
-			# for item in ingredients:
-			# 	query_string = query_string + item + '-'
-			# # remove final dash
-			# query_string = query_string[:-1]
-			# # remove final comma
-			# query_string = query_string[:-1]
-			food_network_dict = executor.submit(food_network_search, ingredients)
+			query_string = ""
+			for item in ingredients:
+				query_string = query_string + item + ',-'
+			# remove final dash
+			query_string = query_string[:-1]
+			# remove final comma
+			query_string = query_string[:-1]
+			food_network_dict = executor.submit(food_network_search, query_string)
 			main_dict.update(food_network_dict.result())
 		if 'simplyRecipes' in websites:
 			simply_recipes_search_dict = executor.submit(simply_recipes_search, ingredients)

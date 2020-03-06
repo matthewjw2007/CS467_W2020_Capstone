@@ -208,10 +208,11 @@ def save_recipe():
         recipe_name = request.form.get('title')
         recipe_url = request.form.get('url')
         user_id = request.form.get('user')
+        recipe_type = request.form.get('type')
         # Find the user
         user = User.query.filter_by(id=user_id).first()
 
-        new_recipe = Recipes(recipe_name=recipe_name, source_url=recipe_url, added_by=user.id)
+        new_recipe = Recipes(recipe_name=recipe_name, source_url=recipe_url, added_by=user.id, type_recipe=recipe_type)
         # Add the new recipe to the db
         db.session.add(new_recipe)
         db.session.commit()

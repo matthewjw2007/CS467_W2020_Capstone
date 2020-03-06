@@ -5,28 +5,52 @@
     <div id="srch-rslts-div">
         <h1 id="results-header">{{payload.title}}</h1>
         <h5>
-            <a target="_blank" href="{{payload.URL}}">Link to Source Webstie</a>
+            <a target="_blank" href="{{payload.URL}}">Link to Source Website</a>
         </h5>
-        <div id="results-div" class="col">
-            <img src="{{payload.image}}" width="500" height="500">
+        <button type="button" class="save-recipe-button" data-title="{{ payload.title }}" data-url="{{ payload.URL }}">Save Recipe</button>
+        <div id="results-div">
+            <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
-        <div>
-            <h3>Ingredients</h3>
+        <div class="col">
+            <h3 class="show-recipe-headers">Ingredients</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.ingredients %}
-                <li>{{item}}</li>
+                <ol class="show-recipe-lists">{{item}}</ol>
                 {% endfor %}
             </ul>
         </div>
-        <div>
-            <h3>Directions</h3>
+        <div class="col">
+            <h3 class="show-recipe-headers">Directions</h3><hr class="show-recipe-hr">
             <ul>
                 {% for item in payload.instructions %}
-                <li>{{item}}</li>
+                <ul class="show-recipe-lists">{{item}}</ul>
                 {% endfor %}
             </ul>
         </div>
     </div>
+        <script>
+        $(function() {
+            $('.save-recipe-button').click(function() {
+                let button = $(this);
+                let recipeTitle = $(this).attr('data-title');
+                //console.log($(this).attr('data-rating'));
+                let recipeURL = $(this).attr('data-url');
+                $.post("/users/recipes", {
+                    title: recipeTitle,
+                    url: recipeURL,
+                    user: {{ current_user.id }}
+                },
+                function(data, status) {
+                    if (status === 'success') {
+                        button.toggle();
+                    }
+                    else {
+                        alert("Error with saving recipe.\nStatus: " + status);
+                    }
+                });
+            });
+        });
+    </script>
     {% endif %}
 
 {% endblock %}

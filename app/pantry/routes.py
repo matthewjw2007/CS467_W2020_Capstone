@@ -27,8 +27,9 @@ def view_pantry():
             new_item = Pantry(owner=current_user.id, name=item, quantity=1, units_used='ounces')
             db.session.add(new_item)
             db.session.commit()
-        payload['message'] = 'Successfully added items!'
-        return render_template('pantry_list.html', payload=payload)
+        res = make_response()
+        
+        return '', 200
     if request.method == 'GET':
         payload = dict()
         pantry_items = Pantry.query.filter_by(owner=current_user.id).all()

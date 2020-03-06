@@ -3,17 +3,17 @@
 {% block content %}
     {% if recipes %}
     {% set count = [ ] %}
-    <div id="srch-rslts-div">
-        <h1>My Recipes</h1>
+        <h1 id="my-recipes-header">My Recipes</h1><hr id="my-recipes-hr">
+    <div id="my-recipes-main-div">
         <div id="results-div">
             {% for recipe in recipes %}
             {% set __ = count.append(1) %}
             <ul>
-                <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.source_url}}">
-                    <li class="recipe-title" id="recipe-title{{count|length}}">{{recipe.recipe_name}}</li>
-                </a>
+                    <li class="recipe-title" id="recipe-title{{count|length}}">
+                        <a href="{{url_for('recipes.view_recipe')}}?url={{recipe.source_url}}&type={{recipe.type_recipe}}">{{recipe.recipe_name}}</a>
+                    </li>
                 <li>
-                    <a href={{recipe.source_url}}>Link to recipe</a>
+                    <a class="recipe-link-my-recipes" href={{recipe.source_url}}>Link to recipe</a>
                 </li>
                 <li id="recipe-url{{count|length}}" hidden>{{recipe.source_url}}</li>
                 <li id="recipe-id{{count|length}}" hidden>{{recipe.id}}</li>
