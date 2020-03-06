@@ -348,6 +348,14 @@ body {
     margin-left: 0;
 }
 
+.cancel-btn {
+    margin-left: .5rem;
+}
+
+.add-item {
+    margin-bottom: 1rem;
+}
+
 .remove-pantry-item-btn {
     float: right;
     margin-top: -20px;

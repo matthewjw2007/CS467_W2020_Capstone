@@ -47,7 +47,7 @@
                     $("#add-items-btn").text("Add Items To Your Pantry");
                 }
                 else {
-                    $("#pantry-form-div").append('<p><form id="add-item-form"><section id="item-entry"><p class="pantry-para" id="pantry-para-1" data-count="1">Add Item: <input type="text" class="pantry-item" id="pantry-item-1" name="item-' + '1' + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-1" onclick="removeItem(1);">Remove</button></p></section><section><button type="button" id="add-item" onclick="addItem();">Add Another Pantry Item</button></section><seciton><button type="button" onclick="submitForm()">Submit</button></section</form><p>');
+                    $("#pantry-form-div").append('<p><form id="add-item-form"><section id="item-entry"><p class="pantry-para" id="pantry-para-1" data-count="1">Add Item: <input type="text" class="pantry-item" id="pantry-item-1" name="item-' + '1' + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-1" onclick="removeItem(1);">Remove</button></p></section><section><button type="button" class="add-item" onclick="addItem();">Add Another Pantry Item</button></section><seciton><button type="button" onclick="submitForm()">Submit</button></section</form><p>');
                     $("#add-items-btn").text("Undo add pantry item(s)");
                 }
             });
@@ -78,7 +78,7 @@
             var itemCount = parseInt($(".pantry-para").last().attr('data-count'));
             itemCount++;
             console.log(itemCount);
-            $("#item-entry").append('<p class="pantry-para" id="pantry-para-' + itemCount + '"  data-count="' + itemCount + '">Add Item: <input type="text" class="pantry-item" id="pantry-item-' + itemCount + '" name="item-' + itemCount + '" placeholder="Enter item here..."><button type="button" id="cancel-btn" data-item="pantry-item-' + itemCount + '" onclick="removeItem(' + itemCount + ');">Remove</button></p>');
+            $("#item-entry").append('<p class="pantry-para" id="pantry-para-' + itemCount + '"  data-count="' + itemCount + '">Add Item: <input type="text" class="pantry-item" id="pantry-item-' + itemCount + '" name="item-' + itemCount + '" placeholder="Enter item here..."><button type="button" class="cancel-btn" data-item="pantry-item-' + itemCount + '" onclick="removeItem(' + itemCount + ');">Remove</button></p>');
         }
 
         function submitForm() {
