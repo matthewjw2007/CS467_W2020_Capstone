@@ -7,8 +7,8 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import FlaskForm
-# from redis import Redis
-# import rq
+from redis import Redis
+import rq
 
 # Database initialization
 db = SQLAlchemy()
@@ -21,8 +21,8 @@ login_helper.login_view = 'users_bp.login'
 def create_app():
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
     app.config.from_object(Config)
-    # app.redis = Redis.from_url(app.config['REDIS_URL'])
-    # app.task_queue = rq.Queue(connection=app.redis)
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue(connection=app.redis)
     migrate = Migrate(app, db)
     db.init_app(app)
     login_helper.init_app(app)
