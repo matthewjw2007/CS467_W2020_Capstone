@@ -347,3 +347,13 @@ body {
     margin-top: .5rem;
     margin-left: 0;
 }
+
+.remove-pantry-item-btn {
+    float: right;
+    margin-top: -20px;
+    margin-right: 1rem;
+}
+
+.pantry-item-list {
+    margin-top: 1rem;
+}
