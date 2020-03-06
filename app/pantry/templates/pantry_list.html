@@ -2,8 +2,9 @@
 
 {% block content %}
     {% if payload %}
-    <div id="pantry-div">
-        <h1 id="pantry-header">Your Pantry</h1>
+    <div class="row">
+        <div id="pantry-div" class="col">
+        <h1 id="pantry-header">Your Pantry</h1><hr id="pantry-list-hr">
         <button id="add-items-btn">Add Items To Your Pantry</button>
         <div id="pantry-form-div">
         </div>
@@ -33,6 +34,7 @@
             {{payload.message}}
         </div>
         {% endif %}
+    </div>
     </div>
     {% endif %}
 

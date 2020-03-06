@@ -335,3 +335,15 @@ body {
     margin-top: -50px;
     margin-right: 1rem;
 }
+
+/* Styles for pantry_list */
+#pantry-header {
+    font-family: 'Kaushan Script', cursive;
+}
+
+#pantry-list-hr {
+    border: 1px solid black;
+    width: 25%;
+    margin-top: .5rem;
+    margin-left: 0;
+}
