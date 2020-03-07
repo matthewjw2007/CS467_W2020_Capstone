@@ -1,11 +1,11 @@
-from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
-from flask import current_app as app
+from flask import Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
+from sqlalchemy import func
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
 from app.users.edit_profile_form import EditProfileForm
-from app.models import User, Recipes
+from app.models import User, Recipes, Pantry
 from app import db
 
 bp = Blueprint('users', __name__, template_folder='templates')
@@ -16,7 +16,11 @@ bp = Blueprint('users', __name__, template_folder='templates')
 def user(username):
     # If user is found then the first appearance of the user is returned otherwise we get a 404 error if no match
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    # print(user.id)
+    total_recipes = len(Recipes.query.filter_by(added_by=user.id).all())
+     # print(len(total_recipes))
+    total_pantry = len(Pantry.query.filter_by(owner=user.id).all())
+    return render_template('user.html', user=user, total_recipes=total_recipes, total_pantry=total_pantry)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -152,7 +156,7 @@ def save_recipe():
 def get_recipes(user_id):
     if request.method == 'GET':
         # Find the user
-        user =  User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=user_id).first()
         recipes = Recipes.query.filter_by(added_by=user_id).all()
         return render_template('my_recipes.html', recipes=recipes)
 
