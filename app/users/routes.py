@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
+from flask import Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
 from flask import current_app as app
 from flask_qrcode import QRcode
 from flask_login import login_user, login_required, logout_user, current_user
@@ -7,8 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
 from app.users.login_form import LoginForm
 from app.users.edit_profile_form import EditProfileForm
+from app.models import User, Recipes, Pantry
 from app.users.two_factor import get_totp, generate_secret
-from app.models import User, Recipes
 from app import db
 
 bp = Blueprint('users', __name__, template_folder='templates')
@@ -20,7 +20,11 @@ qrcode = QRcode(app)
 def user(username):
     # If user is found then the first appearance of the user is returned otherwise we get a 404 error if no match
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
+    # print(user.id)
+    total_recipes = len(Recipes.query.filter_by(added_by=user.id).all())
+     # print(len(total_recipes))
+    total_pantry = len(Pantry.query.filter_by(owner=user.id).all())
+    return render_template('user.html', user=user, total_recipes=total_recipes, total_pantry=total_pantry)
 
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -127,6 +131,7 @@ def login():
             form = LoginForm()
             return render_template('home.html', title='Home', form=form, message=message)
 
+
 @bp.route('/<user_id>/2fa_setup', methods=constants.http_verbs)
 @login_required
 def two_factor_setup(user_id):
@@ -161,6 +166,7 @@ def two_factor_setup(user_id):
             payload['message'] = 'Incorrect code provided. Please add the new QR code to your Google Authenticator App and enter the 6-digit code within the 30 second lifetime.'
             return render_template('two_factor_setup.html', payload=payload)
 
+
 @bp.route('/<user_id>/2fa', methods=constants.http_verbs)
 @login_required
 def two_factor_login(user_id):
@@ -179,6 +185,7 @@ def two_factor_login(user_id):
             payload['message'] = 'Incorrect code provided. Please add the new QR code to your Google Authenticator App and enter the 6-digit code within the 30 second lifetime.'
             return render_template('two_factor_login.html', payload=payload)
 
+
 @bp.route('/<user_id>/2fa_remove', methods=constants.http_verbs)
 @login_required
 def two_factor_remove(user_id):
@@ -193,6 +200,7 @@ def two_factor_remove(user_id):
         form.username.data = current_user.username
         form.email.data = current_user.email_addr
         return render_template('edit_profile.html', form=form, payload=payload)
+
 
 @bp.route('/recipes', methods=constants.http_verbs)
 @login_required
@@ -222,7 +230,7 @@ def save_recipe():
 def get_recipes(user_id):
     if request.method == 'GET':
         # Find the user
-        user =  User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=user_id).first()
         recipes = Recipes.query.filter_by(added_by=user_id).all()
         return render_template('my_recipes.html', recipes=recipes)
 
