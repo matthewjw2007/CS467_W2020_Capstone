@@ -49,8 +49,6 @@ class Pantry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(256), nullable=False)
-    quantity = db.Column(db.Float, nullable=False)
-    units_used = db.Column(db.String(64), nullable=False)
 
     def __repr__(self):
         return f'Pantry {self.id}, {self.owner}, {self.name}, {self.quantity}, {self.units_used}'

@@ -24,7 +24,7 @@ def view_pantry():
             pantry_items.append(items['value'])
             print (pantry_items)
         for item in pantry_items:
-            new_item = Pantry(owner=current_user.id, name=item, quantity=1, units_used='ounces')
+            new_item = Pantry(owner=current_user.id, name=item)
             db.session.add(new_item)
             db.session.commit()
         res = make_response()

@@ -5,6 +5,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.users.register_form import RegisterForm
+from app.users.login_form import LoginForm
 from app.users.edit_profile_form import EditProfileForm
 from app.users.two_factor import get_totp, generate_secret
 from app.models import User, Recipes
@@ -70,8 +71,11 @@ def register():
         # Check that the new user isn't already registered
         user = User.query.filter_by(email_addr=email).first()
         if user:
-            flash('A user with this email address already exists.')
-            return redirect(url_for('main.index'))
+            message = dict()
+            message['1'] = 'A user with this email address already exists.'
+            message['2'] = 'Please proceed back to the home page to login.'
+            form = RegisterForm()
+            return render_template('register.html', message=message, form=form)
 
         else:
             # Create the new user object using the PBKDF2 with SHA-256 hashing standard with 10,000 iterations and a salt length of 128 bytes
@@ -81,13 +85,6 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('main.index'))
-        
-    # All other verbs
-    else:
-        # Make a response object with a JSON body
-        res = make_response(jsonify(error='Invalid HTTP method used for request'))
-        res.status_code = 405
-        return res
         
 
 # Setup route for /login
@@ -103,10 +100,8 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         remember = True if request.form.get('remember') else False
-
         # Find the user
         user =  User.query.filter_by(username=username).first()
-
         if user:
             password_is_correct = check_password_hash(user.password, password)
 
@@ -118,21 +113,19 @@ def login():
                 return redirect(url_for('main.index'))
             
             else:
-                flash('Incorrect username and/or password entered. Try again.')
-                return redirect(url_for('main.index'))
+                message = dict()
+                message['1'] = 'Incorrect username and/or password entered.'
+                message['2'] = 'Please try again.'
+                form = LoginForm()
+                return render_template('home.html', title='Home', form=form, message=message)
 
         # Invalid credentials presented
         else:
-            flash('Incorrect username and/or password entered. Try again.')
-            return redirect(url_for('main.index'))
-        
-    # All other verbs
-    else:
-
-        # Make a response object with a JSON body
-        res = make_response(jsonify(error='Invalid HTTP method used for request'))
-        res.status_code = 405
-        return res
+            message = dict()
+            message['1'] = 'Incorrect username and/or password entered.'
+            message['2'] = 'Please try again.'
+            form = LoginForm()
+            return render_template('home.html', title='Home', form=form, message=message)
 
 @bp.route('/<user_id>/2fa_setup', methods=constants.http_verbs)
 @login_required

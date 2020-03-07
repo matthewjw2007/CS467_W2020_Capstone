@@ -27,6 +27,30 @@ body {
     background-color: #ccf2ff;
 }
 
+.login-error-div {
+    width: 40%;
+    border: 3px solid #930202;
+    background-color: #f76d6d;
+    color: #930202;
+    padding: 10px;
+}
+
+.login-error-p {
+    margin: 0;
+}
+
+.register-error-div {
+    width: 400px;
+    border: 3px solid #930202;
+    background-color: #f76d6d;
+    color: #930202;
+    padding: 10px;
+}
+
+.register-error-p {
+    margin: 0;
+}
+
 .jumbotron {
     padding: 0em;
     margin-bottom: 0em;

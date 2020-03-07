@@ -4,31 +4,142 @@
     <div>
         <div class="row">
             <div class="col">
-                <h6>Log In</h6>
+                <h4>Register New User</h4>
+                {% if message %}
+                <div class="register-error-div">
+                    <p class="register-error-p">
+                        {{ message['1'] }}
+                        <br>
+                        {{ message['2'] }}
+                    </p>
+                </div>
+                {% endif %}
                 <form action="{{ url_for('users.register') }}" method="post" novalidate>
                     {{ form.hidden_tag() }}
-                    <p>
+                    <p id="register-username">
                         {{ form.username.label }}<br>
                         {{ form.username(size=32) }}
                     </p>
-                    <p>
+                    <p id="register-email">
                         {{ form.email.label }}<br>
                         {{ form.email(size=32) }}
                     </p>
-                    <p>
+                    <p id="register-password1">
                         {{ form.password.label }}<br>
                         {{ form.password(size=32) }}
                     </p>
-                    <p>
+                    <div id="password-constraints-div">
+                        <ul id="password-constraints-list">
+                            <h5>Your password must meet the following criteria:</h5>
+                            <li id="num-chars-li">8 to 16 characters in length</li>
+                            <li id="upper-li">Contain at least 1 uppercase letter (A - Z)</li>
+                            <li id="lower-li">Contain at least 1 lowercase letter (a - z)</li>
+                            <li id="number-li">Contain at least 1 number (0 - 9)</li>
+                            <li id="special-li">Contain at least 1 special character (!, @, #, $, %, ^, &, or *)</li>
+                        </ul>
+                    </div>
+                    <p id="register-password2">
                         {{ form.verify_password.label }}<br>
                         {{ form.verify_password(size=32) }}
+                        <p id="verify-password-label" hidden></p>
                     </p>
-                    <p>
+                    <p id="register-submit">
                         {{ form.submit() }}
+                    </p>
+                    <p id="verify-p">
                     </p>
                 </form>
             </div>
             <div class="w-100"></div>
         </div>
     </div>
+    <script>
+        $(function() {
+            $('#password').keyup(function() {
+                var selection = window.getSelection().toString();
+                if (selection !== '') {
+                    return;
+                }
+                if ($.inArray( event.keyCode, [38,40,37,39] ) !== -1) {
+                    return;
+                }
+                var input = $('#password').val();
+                var lengthBool = false;
+                var upperCharBool = false;
+                var lowerCharBool = false;
+                var numBool = false;
+                var specialBool = false;
+                $('#num-chars-li').css('color', 'black');
+                $('#upper-li').css('color', 'black');
+                $('#lower-li').css('color', 'black');
+                $('#number-li').css('color', 'black');
+                $('#special-li').css('color', 'black');
+                for (i = 0; i < input.length; i++) {
+                    var char = input.charCodeAt(i)
+                    console.log(char);
+                    // total length
+                    if (input.length >= 8 && input.length <= 16) {
+                        lengthBool = true;
+                    }
+
+
+                    // Upper case letter
+                    if (char >= 65 && char <= 90) {
+                        upperCharBool = true;
+                    }
+
+                    // Lower case letter
+                    if (char >= 97 && char <= 122) {
+                        lowerCharBool = true;
+                    }
+
+                    // Number
+                    if (char >= 48 && char <= 57) {
+                        numBool = true;
+                    }
+
+                    // Special character
+                    if (char == 33 || (char >= 35 && char <= 38) || char == 42 || char == 64 || char == 94) {
+                        specialBool = true;
+                    }
+
+                    // total length
+                    if (lengthBool) {
+                        $('#num-chars-li').css('color', 'green');
+                    }
+                    else {
+                        $('#num-chars-li').css('color', 'red');
+                    }
+                    // Upper case letter
+                    if (upperCharBool) {
+                        $('#upper-li').css('color', 'green');
+                    }
+                    else {
+                        $('#upper-li').css('color', 'red');
+                    }
+                    // Lower case letter
+                    if (lowerCharBool) {
+                        $('#lower-li').css('color', 'green');
+                    }
+                    else {
+                        $('#lower-li').css('color', 'red');
+                    }
+                    // Number
+                    if (numBool) {
+                        $('#number-li').css('color', 'green');
+                    }
+                    else {
+                        $('#number-li').css('color', 'red');
+                    }
+                    // Special character
+                    if (specialBool) {
+                        $('#special-li').css('color', 'green');
+                    }
+                    else {
+                        $('#special-li').css('color', 'red');
+                    }
+                }
+            });
+        })
+    </script>
 {% endblock %}

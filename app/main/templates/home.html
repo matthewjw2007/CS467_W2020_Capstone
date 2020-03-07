@@ -19,6 +19,15 @@
                 {# current_user variable comes from Flask-Login #}
                 {% if current_user.is_anonymous %}
                     <h6>Log In</h6>
+                    {% if message %}
+                    <div class="login-error-div">
+                        <p class="login-error-p">
+                            {{ message['1'] }}
+                            <br>
+                            {{ message['2'] }}
+                        </p>
+                    </div>
+                    {% endif %}
                     <form action="{{ url_for('users.login') }}" method="post" novalidate>
                         {{ form.hidden_tag() }}
                         <p>
