@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <h3>Two-Factor Authentication</h3>
+        <p>
+            <h4>Enter 6-digit code below:</h4>
+            {% if payload.message%}
+            <p>{{ payload.message }}</p>
+            {% endif %}
+            <form action="{{url_for('users.two_factor_login', user_id=(current_user.id))}}" method="post">
+                <input name="code" type="text"><button type="submit">Submit</button>
+            </form>
+        </p>
+    </div>
+{% endblock %}

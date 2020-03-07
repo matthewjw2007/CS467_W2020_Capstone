@@ -24,7 +24,7 @@
                     <button type="button" class="remove-pantry-item-btn" onclick="deleteItem({{item.id}});"><i class="fa fa-close"></i></button>
                 {% endfor %}
             </ol>
-            <form class="hidden-form" id="hidden-form" method="post" action="{{url_for('recipes.find_recipes')}}">
+            <form class="hidden-form" id="hidden-form" method="post" action="{{url_for('recipes.user_find_recipes', user_id=current_user.id)}}">
                 <input type="hidden" name="ingredients" value="{% for item in payload.pantry %}{{item.name}}, {% endfor %}">
                 <input type="hidden" name="allRecipes" value="True">
                 <button type="submit" id="make-btn">What Can I Make?</button>

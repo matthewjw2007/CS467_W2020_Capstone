@@ -19,6 +19,19 @@
             </p>
         </form>
         </div>
+        {% if payload.message %}
+        <p>
+        {{payload.message}}
+        </p>
+        {% endif %}
+        <h4>Two-Factor Authentication</h4>
+        <p>
+        {% if payload.twofa == False %}
+        <a id="cancel-link" href="{{ url_for('users.two_factor_setup', user_id=current_user.id) }}">Setup Two Factor Authentication</a>
+        {% else %}
+        <a id="cancel-link" href="{{ url_for('users.two_factor_remove', user_id=current_user.id) }}">Cancel Two Factor Authentication</a>
+        {% endif %}
+        </p>
         <a id="cancel-link" href="{{ url_for('users.user', username=current_user.username) }}">Cancel</a>
     </div>
 {% endblock %}
