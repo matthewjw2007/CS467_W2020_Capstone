@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        <div class="row">
+            <div class="col">
+                <h3>Log In</h3>
+                {% if message %}
+                <div class="login-error-div">
+                    <p class="login-error-p">
+                        {{ message['1'] }}
+                        <br>
+                        {{ message['2'] }}
+                    </p>
+                </div>
+                {% endif %}
+                <form action="{{ url_for('users.login', next=request.args.get('next')) }}" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}<br>
+                        {{ form.username(size=32) }}
+                    </p>
+                    <p>
+                        {{ form.password.label }}<br>
+                        {{ form.password(size=32) }}
+                    </p>
+                    <p>
+                        {{ form.remember_me() }}
+                        {{ form.remember_me.label }}
+                    </p>
+                    <p>
+                        {{ form.submit() }}
+                    </p>
+                </form>
+                <p>
+                    New user? <a class="cancel-link" href="{{ url_for('users.register') }}">Create an account</a>
+                </p>
+            </div>
+            <div class="w-100"></div>
+        </div>
+    </div>
+{% endblock %}

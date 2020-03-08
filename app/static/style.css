@@ -223,7 +223,7 @@ body {
 }
 
 /* Styles for edit_profile.html */
-#cancel-link {
+.cancel-link {
     text-decoration: underline;
 }
 

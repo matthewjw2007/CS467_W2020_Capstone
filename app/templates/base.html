@@ -66,13 +66,13 @@
                         <a class="nav-link" href="{{ url_for('pantry.view_pantry') }}">My Pantry</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.get_recipes', user_id=current_user.id) }}">My Recipes</a>
+                        <a class="nav-link" href="{{ url_for('users.get_recipes') }}">My Recipes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('recipes.find_recipes') }}">Find Recipes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.user', username=current_user.username) }}">My Account</a>
+                        <a class="nav-link" href="{{ url_for('users.user') }}">My Account</a>
                     </li>
                 </ul>
                 {% if current_user.is_anonymous %}

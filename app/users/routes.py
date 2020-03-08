@@ -4,6 +4,7 @@ from flask_qrcode import QRcode
 from flask_login import login_user, login_required, logout_user, current_user
 import constants
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.urls import url_parse
 from app.users.register_form import RegisterForm
 from app.users.login_form import LoginForm
 from app.users.edit_profile_form import EditProfileForm
@@ -15,14 +16,12 @@ bp = Blueprint('users', __name__, template_folder='templates')
 qrcode = QRcode(app)
 
 
-@bp.route('/user/<username>')
+@bp.route('/user')
 @login_required
-def user(username):
+def user():
     # If user is found then the first appearance of the user is returned otherwise we get a 404 error if no match
-    user = User.query.filter_by(username=username).first_or_404()
-    # print(user.id)
+    user = User.query.filter_by(username=current_user.username).first_or_404()
     total_recipes = len(Recipes.query.filter_by(added_by=user.id).all())
-     # print(len(total_recipes))
     total_pantry = len(Pantry.query.filter_by(owner=user.id).all())
     return render_template('user.html', user=user, total_recipes=total_recipes, total_pantry=total_pantry)
 
@@ -36,7 +35,6 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.email_addr = form.email.data
         db.session.commit()
-        flash('Profile updated')
         return redirect(url_for('users.user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
@@ -98,9 +96,12 @@ def register():
 @bp.route('/login', methods=constants.http_verbs)
 # @bp.route('/index', methods=constants.http_verbs)
 def login():
-    # GET
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = LoginForm()
+        return render_template('login.html', title='Login', form=form)
 
+    #POST
+    if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         remember = True if request.form.get('remember') else False
@@ -108,13 +109,16 @@ def login():
         user =  User.query.filter_by(username=username).first()
         if user:
             password_is_correct = check_password_hash(user.password, password)
-
             # Valid credentials are presented
             if password_is_correct:
-                login_user(user)
                 if user.two_factor == True:
                     return redirect(url_for('users.two_factor_login', user_id=(current_user.id)))
-                return redirect(url_for('main.index'))
+                else:
+                    login_user(user)
+                    next_page = request.args.get('next')
+                    if not next_page or url_parse(next_page).netloc != '':
+                        next_page = url_for('main.index')
+                    return redirect(next_page)
             
             else:
                 message = dict()
@@ -132,12 +136,12 @@ def login():
             return render_template('home.html', title='Home', form=form, message=message)
 
 
-@bp.route('/<user_id>/2fa_setup', methods=constants.http_verbs)
+@bp.route('/2fa_setup', methods=constants.http_verbs)
 @login_required
-def two_factor_setup(user_id):
+def two_factor_setup():
     payload = dict()
     if request.method == 'GET':
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=current_user.id).first()
         user_email = user.email_addr
         secret = generate_secret()
         user.secret = secret
@@ -147,7 +151,7 @@ def two_factor_setup(user_id):
         return render_template('two_factor_setup.html', payload=payload)
     if request.method == 'POST':
         entered_code = request.form.get('code')
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=current_user.id).first()
         user_secret = user.secret
         code = get_totp(user_secret)
         if code == entered_code:
@@ -156,7 +160,7 @@ def two_factor_setup(user_id):
             db.session.commit()
             return render_template('two_factor_setup.html', payload=payload)
         else:
-            user = User.query.filter_by(id=user_id).first()
+            user = User.query.filter_by(id=current_user.id).first()
             user_email = user.email_addr
             secret = generate_secret()
             user.secret = secret
@@ -167,30 +171,34 @@ def two_factor_setup(user_id):
             return render_template('two_factor_setup.html', payload=payload)
 
 
-@bp.route('/<user_id>/2fa', methods=constants.http_verbs)
+@bp.route('/2fa', methods=constants.http_verbs)
 @login_required
-def two_factor_login(user_id):
+def two_factor_login():
     payload = dict()
     if request.method == 'GET':
         return render_template('two_factor_login.html', payload=payload)
     elif request.method == 'POST':
         payload = dict()
         entered_code = request.form.get('code')
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=current_user.id).first()
         user_secret = user.secret
         code = get_totp(user_secret)
         if code == entered_code:
-            return redirect(url_for('main.index'))
+            login_user(user)
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('main.index')
+            return redirect(next_page)
         else:
             payload['message'] = 'Incorrect code provided. Please add the new QR code to your Google Authenticator App and enter the 6-digit code within the 30 second lifetime.'
             return render_template('two_factor_login.html', payload=payload)
 
 
-@bp.route('/<user_id>/2fa_remove', methods=constants.http_verbs)
+@bp.route('/2fa_remove', methods=constants.http_verbs)
 @login_required
-def two_factor_remove(user_id):
+def two_factor_remove():
     if request.method == 'GET':
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=current_user.id).first()
         user.two_factor = False
         db.session.commit()
         payload = dict()
@@ -217,22 +225,20 @@ def save_recipe():
         # Add the new recipe to the db
         db.session.add(new_recipe)
         db.session.commit()
-
-        print(recipe_name)
-        print(recipe_url)
-        print(f'Submitted user is {user_id} and user in db is {user.id}.')
-        print('Printed from /users/recipes')
     return "Successful POST request"
 
 
-@bp.route('/<user_id>/recipes', methods=constants.http_verbs)
+@bp.route('/recipes', methods=constants.http_verbs)
 @login_required
-def get_recipes(user_id):
+def get_recipes():
     if request.method == 'GET':
+        print ("Get Recipes route")
         # Find the user
-        user = User.query.filter_by(id=user_id).first()
-        recipes = Recipes.query.filter_by(added_by=user_id).all()
+        user = User.query.filter_by(id=current_user.id).first()
+        recipes = Recipes.query.filter_by(added_by=current_user.id).all()
+        print(f"recipes = {recipes}")
         return render_template('my_recipes.html', recipes=recipes)
+
 
 
 @bp.route('/recipes/<recipe_id>', methods=constants.http_verbs)

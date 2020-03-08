@@ -18,17 +18,13 @@ def view_pantry():
     if request.method == 'POST':
         payload = dict()
         pantry_items = list()
-        print ('Printing form data now!')
-        print (request.json)
         for items in request.json:
             pantry_items.append(items['value'])
-            print (pantry_items)
         for item in pantry_items:
             new_item = Pantry(owner=current_user.id, name=item)
             db.session.add(new_item)
             db.session.commit()
         res = make_response()
-        
         return '', 200
     if request.method == 'GET':
         payload = dict()
@@ -37,7 +33,6 @@ def view_pantry():
             payload['pantry'] = pantry_items
         else:
             payload['message'] = "You don't have any items in your pantry. Would you like to add some?"
-
         return render_template('pantry_list.html', payload=payload)
 
 @bp.route('/<item_id>', methods=constants.http_verbs)

@@ -13,7 +13,7 @@ import rq
 # Database initialization
 db = SQLAlchemy()
 login_helper = LoginManager()
-login_helper.login_view = 'users_bp.login'
+# login_helper.login_view = 'users_bp.login'
 # # Redis / rq intialization
 # r = redis.Redis()
 # q = Queue(connection=r)
@@ -33,6 +33,7 @@ def create_app():
         from .recipes.routes import bp as recipes_bp
         from .pantry.routes import bp as pantry_bp
 
+        login_helper.login_view = 'users.login'
         db.create_all()
 
         app.register_blueprint(main_bp, url_prefix='/')

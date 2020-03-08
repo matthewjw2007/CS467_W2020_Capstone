@@ -101,7 +101,6 @@ def num_jobs(user_id):
     user = User.query.filter_by(id=user_id).first()
     update_tasks(user)
     payload['num_jobs'] = user.num_searches
-    print (payload)
     return jsonify(payload)
 
 @bp.route('search/<user_id>/current_searches', methods=constants.http_verbs)
