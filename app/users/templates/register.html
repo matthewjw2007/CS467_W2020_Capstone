@@ -41,7 +41,7 @@
                     <p id="register-password2">
                         {{ form.verify_password.label }}<br>
                         {{ form.verify_password(size=32) }}
-                        <p id="verify-password-label" hidden></p>
+                        <p id="verify-password-label"></p>
                     </p>
                     <p id="register-submit">
                         {{ form.submit() }}
@@ -55,91 +55,151 @@
     </div>
     <script>
         $(function() {
+            $('#submit').hide();
             $('#password').keyup(function() {
-                var selection = window.getSelection().toString();
-                if (selection !== '') {
-                    return;
-                }
-                if ($.inArray( event.keyCode, [38,40,37,39] ) !== -1) {
-                    return;
-                }
-                var input = $('#password').val();
-                var lengthBool = false;
-                var upperCharBool = false;
-                var lowerCharBool = false;
-                var numBool = false;
-                var specialBool = false;
-                $('#num-chars-li').css('color', 'black');
-                $('#upper-li').css('color', 'black');
-                $('#lower-li').css('color', 'black');
-                $('#number-li').css('color', 'black');
-                $('#special-li').css('color', 'black');
-                for (i = 0; i < input.length; i++) {
-                    var char = input.charCodeAt(i)
-                    console.log(char);
-                    // total length
-                    if (input.length >= 8 && input.length <= 16) {
-                        lengthBool = true;
-                    }
-
-
-                    // Upper case letter
-                    if (char >= 65 && char <= 90) {
-                        upperCharBool = true;
-                    }
-
-                    // Lower case letter
-                    if (char >= 97 && char <= 122) {
-                        lowerCharBool = true;
-                    }
-
-                    // Number
-                    if (char >= 48 && char <= 57) {
-                        numBool = true;
-                    }
-
-                    // Special character
-                    if (char == 33 || (char >= 35 && char <= 38) || char == 42 || char == 64 || char == 94) {
-                        specialBool = true;
-                    }
-
-                    // total length
-                    if (lengthBool) {
-                        $('#num-chars-li').css('color', 'green');
-                    }
-                    else {
-                        $('#num-chars-li').css('color', 'red');
-                    }
-                    // Upper case letter
-                    if (upperCharBool) {
-                        $('#upper-li').css('color', 'green');
-                    }
-                    else {
-                        $('#upper-li').css('color', 'red');
-                    }
-                    // Lower case letter
-                    if (lowerCharBool) {
-                        $('#lower-li').css('color', 'green');
-                    }
-                    else {
-                        $('#lower-li').css('color', 'red');
-                    }
-                    // Number
-                    if (numBool) {
-                        $('#number-li').css('color', 'green');
-                    }
-                    else {
-                        $('#number-li').css('color', 'red');
-                    }
-                    // Special character
-                    if (specialBool) {
-                        $('#special-li').css('color', 'green');
-                    }
-                    else {
-                        $('#special-li').css('color', 'red');
-                    }
+                firstPwdVerify();
+                if ($('#verify_password').val().length > 0) {
+                    secondPwdVerify();
                 }
             });
+            
         })
+
+        $(function() {
+            $('#verify_password').keyup(function() {
+                secondPwdVerify();
+            });
+        })
+
+        function firstPwdVerify() {
+            var selection = window.getSelection().toString();
+            if (selection !== '') {
+                return;
+            }
+            if ($.inArray( event.keyCode, [38,40,37,39] ) !== -1) {
+                return;
+            }
+            var input = $('#password').val();
+            var lengthBool = false;
+            var upperCharBool = false;
+            var lowerCharBool = false;
+            var numBool = false;
+            var specialBool = false;
+            $('#num-chars-li').css('color', 'black');
+            $('#upper-li').css('color', 'black');
+            $('#lower-li').css('color', 'black');
+            $('#number-li').css('color', 'black');
+            $('#special-li').css('color', 'black');
+            for (i = 0; i < input.length; i++) {
+                var char = input.charCodeAt(i);
+                // total length
+                if (input.length >= 8 && input.length <= 16) {
+                    lengthBool = true;
+                }
+
+                // Upper case letter
+                if (char >= 65 && char <= 90) {
+                    upperCharBool = true;
+                }
+
+                // Lower case letter
+                if (char >= 97 && char <= 122) {
+                    lowerCharBool = true;
+                }
+
+                // Number
+                if (char >= 48 && char <= 57) {
+                    numBool = true;
+                }
+
+                // Special character
+                if (char == 33 || (char >= 35 && char <= 38) || char == 42 || char == 64 || char == 94) {
+                    specialBool = true;
+                }
+
+                if (lengthBool) {
+                    $('#num-chars-li').css('color', 'green');
+                }
+                else {
+                    $('#num-chars-li').css('color', 'red');
+                }
+
+                if (upperCharBool) {
+                    $('#upper-li').css('color', 'green');
+                }
+                else {
+                    $('#upper-li').css('color', 'red');
+                }
+
+                if (lowerCharBool) {
+                    $('#lower-li').css('color', 'green');
+                }
+                else {
+                    $('#lower-li').css('color', 'red');
+                }
+
+                if (numBool) {
+                    $('#number-li').css('color', 'green');
+                }
+                else {
+                    $('#number-li').css('color', 'red');
+                }
+
+                if (specialBool) {
+                    $('#special-li').css('color', 'green');
+                }
+                else {
+                    $('#special-li').css('color', 'red');
+                }
+            }
+        }
+
+        function secondPwdVerify() {
+            var selection = window.getSelection().toString();
+            if (selection !== '') {
+                return;
+            }
+            if ($.inArray( event.keyCode, [38,40,37,39] ) !== -1) {
+                return;
+            }
+            var input = $('#verify_password').val();
+            var password = $('#password').val();
+            var matchBool = true;
+            
+            for (i = 0; i < input.length; i++) {
+                if (input.length == password.length) {
+                    var verifyChar = input.charCodeAt(i);
+                    var pwdChar = password.charCodeAt(i);
+
+                    if (verifyChar != pwdChar) {
+                        matchBool = false;
+                    }
+                }
+
+                else {
+                    matchBool = false;
+                }
+            }
+
+            if (matchBool) {
+                $('#verify-password-label').text('Passwords match');
+                $('#verify-password-label').css('color', 'green');
+                $('#submit').show();
+            }
+
+            else {
+                $('#verify-password-label').text('Passwords do not match');
+                $('#verify-password-label').css('color', 'red');
+                $('#submit').hide();
+            }
+
+            if (input.length > 0) {
+                $('#verify-password-label').show();
+            }
+            else {
+                $('#verify-password-label').hide();
+                $('#submit').hide();
+            }
+        }
     </script>
 {% endblock %}

@@ -112,6 +112,13 @@ body {
     position: relative;
 }
 
+#verify-password-label {
+    padding: 1px;
+    text-align: right;
+    font-size: small;
+    width: 319px;
+}
+
 #dropdown {
     display: none;
     position: absolute;
