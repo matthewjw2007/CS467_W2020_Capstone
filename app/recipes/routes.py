@@ -6,7 +6,7 @@ from app.scraper.scraper import recipe_search
 from app.scraper.all_recipes import get_all_recipe
 from app.scraper.food_network import get_foodnetwork
 from app.scraper.simply_recipes import get_simply_recipe
-from app.models import User
+from app.models import User, Recipes
 from app import db
 import rq
 from rq.job import Job
@@ -89,12 +89,17 @@ def user_find_recipes(user_id):
 @login_required
 def view_search_results(user_id, task_id):
     form = SearchForm()
+    recipes = []
     task = Job.fetch(task_id, connection=current_app.redis)
     user = User.query.filter_by(id=user_id).first()
+    saved_recipes = Recipes.query.filter_by(added_by=user.id).all()
+    if len(saved_recipes) > 0:
+        for recipe in saved_recipes:
+            recipes.append(recipe.recipe_name)
     payload = dict()
     payload['results'] = task.result
     print (payload)
-    return render_template('find_recipes.html', title='Results', form=form, payload=payload)
+    return render_template('find_recipes.html', title='Results', form=form, saved_recipes=recipes, payload=payload)
 
 
 @bp.route('search/<user_id>/jobs', methods=constants.http_verbs)

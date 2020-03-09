@@ -48,7 +48,13 @@
                             <p class="recipe-link">Source: <a target="_blank" href={{recipe.URL}}>Link</a></p>
                             <p class="recipe-rating">{{ recipe.stars }}</p>
                             <p>
-                                {% if current_user.is_anonymous %}
+                                {% set ns = namespace(found=false) %}
+                                {% for name in saved_recipes %}
+                                    {% if recipe.title == name %}
+                                    {% set ns.found = true %}
+                                    {% endif %}
+                                    {% endfor %}
+                                {% if current_user.is_anonymous or ns.found == true %}
                                 {% else %}
                                 <button type="button" class="save-recipe-btn" data-count="{{count|length}}">Save Recipe</button>
                                 {% endif %}
