@@ -225,20 +225,19 @@ def save_recipe():
         # Add the new recipe to the db
         db.session.add(new_recipe)
         db.session.commit()
-    return "Successful POST request"
+        return "Successful POST request"
 
 
-@bp.route('/recipes', methods=constants.http_verbs)
+@bp.route('/recipe', methods=constants.http_verbs)
 @login_required
 def get_recipes():
     if request.method == 'GET':
-        print ("Get Recipes route")
+        print("Get Recipes route")
         # Find the user
         user = User.query.filter_by(id=current_user.id).first()
-        recipes = Recipes.query.filter_by(added_by=current_user.id).all()
+        recipes = Recipes.query.filter_by(added_by=user.id).all()
         print(f"recipes = {recipes}")
         return render_template('my_recipes.html', recipes=recipes)
-
 
 
 @bp.route('/recipes/<recipe_id>', methods=constants.http_verbs)

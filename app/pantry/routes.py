@@ -35,6 +35,7 @@ def view_pantry():
             payload['message'] = "You don't have any items in your pantry. Would you like to add some?"
         return render_template('pantry_list.html', payload=payload)
 
+
 @bp.route('/<item_id>', methods=constants.http_verbs)
 @login_required
 def delete_item(item_id):

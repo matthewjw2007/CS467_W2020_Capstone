@@ -43,6 +43,7 @@ def find_recipes():
             payload = {'error': 'Nothing was entered in the search bar.'}
     return render_template('find_recipes.html', form=form, payload=payload)
 
+
 @bp.route('/search/<user_id>', methods=constants.http_verbs)
 @login_required
 def user_find_recipes(user_id):
@@ -64,7 +65,7 @@ def user_find_recipes(user_id):
                 websites.append('foodnetwork')
                 websites.append('simplyRecipes')
             search_string = request.form.get('ingredients')
-            print (f"Sreach_string is: {search_string}")
+            print (f"Search_string is: {search_string}")
             ingredients = request.form.get('ingredients').split()
             ingredient_list = list()
             for item in ingredients:
@@ -83,6 +84,7 @@ def user_find_recipes(user_id):
             payload = {'error': 'Nothing was entered in the search bar.'}
         return render_template('find_recipes.html', form=form, payload=payload)
 
+
 @bp.route('/search/<user_id>/current_searches/<task_id>', methods=constants.http_verbs)
 @login_required
 def view_search_results(user_id, task_id):
@@ -92,7 +94,8 @@ def view_search_results(user_id, task_id):
     payload = dict()
     payload['results'] = task.result
     print (payload)
-    return(render_template('find_recipes.html', form=form, payload=payload))
+    return render_template('find_recipes.html', form=form, payload=payload)
+
 
 @bp.route('search/<user_id>/jobs', methods=constants.http_verbs)
 @login_required
@@ -102,6 +105,7 @@ def num_jobs(user_id):
     update_tasks(user)
     payload['num_jobs'] = user.num_searches
     return jsonify(payload)
+
 
 @bp.route('search/<user_id>/current_searches', methods=constants.http_verbs)
 @login_required
@@ -126,6 +130,7 @@ def view_recipe():
     else:
         recipe = get_simply_recipe(recipe_url)
     return render_template('show_recipe.html', payload=recipe)
+
 
 def assign_task(user, task_id, search_string):
     num_tasks = user.num_searches
@@ -164,6 +169,7 @@ def assign_task(user, task_id, search_string):
         user.search_id_5 = task_id
         user.search_string_5 = search_string
     db.session.commit()
+
 
 def update_tasks(user):
     # Get current number of searches
@@ -229,6 +235,7 @@ def update_tasks(user):
     user.num_searches = num_tasks
     db.session.commit()
     update_cascade(user)
+
 
 def update_cascade(user):
     if user.num_searches == 1:
@@ -350,6 +357,7 @@ def update_cascade(user):
                 user.search_id_5 = None
                 user.search_string_5 = None
                 db.session.commit()
+
 
 def get_tasks(user):
     payload = dict()
