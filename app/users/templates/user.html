@@ -4,15 +4,6 @@
     <div class="col">
         <h3>Welcome, {{ user.username }}</h3>
         <hr id="hr-user"><br>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {%  endwith %}
         <h6>Username: {{ user.username }}</h6><br>
         <h6>Email: {{ user.email_addr }}</h6><br>
         <h6>Last Seen: {{ user.last_seen }}</h6><br>

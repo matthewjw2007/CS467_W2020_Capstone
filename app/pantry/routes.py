@@ -10,6 +10,7 @@ bp = Blueprint('pantry', __name__, template_folder='templates')
 @bp.route('/', methods=constants.http_verbs)
 @login_required
 def view_pantry():
+    user = User.query.filter_by(id=current_user.id).first()
     if request.method == 'POST':
         payload = dict()
         pantry_items = list()
@@ -28,7 +29,7 @@ def view_pantry():
             payload['pantry'] = pantry_items
         else:
             payload['message'] = "You don't have any items in your pantry. Would you like to add some?"
-        return render_template('pantry_list.html', title='My Pantry', payload=payload)
+        return render_template('pantry_list.html', title='My Pantry', user=user, payload=payload)
 
 
 @bp.route('/<item_id>', methods=constants.http_verbs)
