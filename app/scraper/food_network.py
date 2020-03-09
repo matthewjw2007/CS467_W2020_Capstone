@@ -31,15 +31,15 @@ def getRecipeList(recipeUrl):
         imageUrl = imageContainer['src']
         recipeCard['image'] = "http:" + imageUrl
     else:
-        recipeCard['image'] = ""
+        recipeCard['image'] = "https://i.imgur.com/bvzLAyR.jpg"
 
     # Return single recipe
     return recipeCard
 
 
-def getUrls(item, pageNum):
+def getUrls(ingredients, pageNum):
     # Search a few pages from main search result
-    searchUrl = "https://www.foodnetwork.com/search/" + item + "-/p/" + str(pageNum) + "/rating"
+    searchUrl = "https://www.foodnetwork.com/search/" + ingredients + "-/p/" + str(pageNum) + "/rating"
     recipeUrlList = urlReq(searchUrl)
     htmlRaw = recipeUrlList.read()
     recipeUrlList.close()
@@ -84,7 +84,7 @@ def get_foodnetwork(recipeUrl):
         imageUrl = imageContainer['src']
         recipeCard['image'] = "http:" + imageUrl
     else:
-        recipeCard['image'] = ""
+        recipeCard['image'] = "https://i.imgur.com/bvzLAyR.jpg"
 
     # Find metadata of the recipe
     metadataAry = []
