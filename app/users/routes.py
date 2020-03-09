@@ -236,7 +236,7 @@ def get_recipes():
         # Find the user
         user = User.query.filter_by(id=current_user.id).first()
         recipes = Recipes.query.filter_by(added_by=user.id).all()
-        # print(f"recipes = {recipes}")
+        print(f"recipes = {recipes}")
         return render_template('my_recipes.html', title='My Recipes', recipes=recipes)
 
 
