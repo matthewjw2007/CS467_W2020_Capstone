@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, jsonify, current_app
-from flask_login import login_required, current_user
+from flask_login import login_required
 import constants
 from app.recipes.search_form import SearchForm
 from app.scraper.scraper import recipe_search

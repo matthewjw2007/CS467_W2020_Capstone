@@ -1,13 +1,8 @@
-from flask import Flask, Blueprint, jsonify, make_response, request, render_template, flash, redirect, url_for
-from flask import current_app as app
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint, make_response, request, render_template
+from flask_login import login_required, current_user
 import constants
-from werkzeug.security import generate_password_hash, check_password_hash
-from app.recipes.search_form import SearchForm
 from app.models import User, Pantry
 from app import db
-from app.scraper.scraper import recipe_search
-from app.scraper.all_recipes import get_all_recipe
 
 bp = Blueprint('pantry', __name__, template_folder='templates')
 
@@ -33,7 +28,7 @@ def view_pantry():
             payload['pantry'] = pantry_items
         else:
             payload['message'] = "You don't have any items in your pantry. Would you like to add some?"
-        return render_template('pantry_list.html', payload=payload)
+        return render_template('pantry_list.html', title='My Pantry', payload=payload)
 
 
 @bp.route('/<item_id>', methods=constants.http_verbs)
