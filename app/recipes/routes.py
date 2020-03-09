@@ -41,7 +41,7 @@ def find_recipes():
             payload['results'] = recipe_search(ingredient_list, websites)
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
-    return render_template('find_recipes.html', form=form, payload=payload)
+    return render_template('find_recipes.html', title='Search', form=form, payload=payload)
 
 
 @bp.route('/search/<user_id>', methods=constants.http_verbs)
@@ -82,7 +82,7 @@ def user_find_recipes(user_id):
             }
         else:
             payload = {'error': 'Nothing was entered in the search bar.'}
-        return render_template('find_recipes.html', form=form, payload=payload)
+        return render_template('find_recipes.html', title='Search', form=form, payload=payload)
 
 
 @bp.route('/search/<user_id>/current_searches/<task_id>', methods=constants.http_verbs)
@@ -94,7 +94,7 @@ def view_search_results(user_id, task_id):
     payload = dict()
     payload['results'] = task.result
     print (payload)
-    return render_template('find_recipes.html', form=form, payload=payload)
+    return render_template('find_recipes.html', title='Results', form=form, payload=payload)
 
 
 @bp.route('search/<user_id>/jobs', methods=constants.http_verbs)
@@ -129,7 +129,7 @@ def view_recipe():
         recipe = get_foodnetwork(recipe_url)
     else:
         recipe = get_simply_recipe(recipe_url)
-    return render_template('show_recipe.html', payload=recipe)
+    return render_template('show_recipe.html', title='Recipe Details', payload=recipe)
 
 
 def assign_task(user, task_id, search_string):

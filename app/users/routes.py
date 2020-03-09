@@ -77,7 +77,7 @@ def register():
             message['1'] = 'A user with this email address already exists.'
             message['2'] = 'Please proceed back to the home page to login.'
             form = RegisterForm()
-            return render_template('register.html', message=message, form=form)
+            return render_template('register.html', title='Register', message=message, form=form)
 
         else:
             # Create the new user object using the PBKDF2 with SHA-256 hashing standard with 10,000 iterations and a salt length of 128 bytes
@@ -228,7 +228,7 @@ def save_recipe():
         return "Successful POST request"
 
 
-@bp.route('/recipe', methods=constants.http_verbs)
+@bp.route('/my_recipes', methods=constants.http_verbs)
 @login_required
 def get_recipes():
     if request.method == 'GET':
@@ -237,7 +237,7 @@ def get_recipes():
         user = User.query.filter_by(id=current_user.id).first()
         recipes = Recipes.query.filter_by(added_by=user.id).all()
         print(f"recipes = {recipes}")
-        return render_template('my_recipes.html', recipes=recipes)
+        return render_template('my_recipes.html', title='My Recipes', recipes=recipes)
 
 
 @bp.route('/recipes/<recipe_id>', methods=constants.http_verbs)
