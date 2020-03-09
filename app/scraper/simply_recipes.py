@@ -4,11 +4,6 @@ from urllib.request import Request
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
 
-from .relevance_index import calc_relevance
-
-import time  # timing the amount of time required to search
-import pprint  # Pretty Print to make things print neatly
-
 def getRecipeList(recipeUrl):
     # Opening the connection grabing webpage, store all raw information
     req = Request(recipeUrl, headers={'User-Agent': 'Mozilla/5.0'})
@@ -100,10 +95,6 @@ def get_simply_recipe(recipeUrl):
         ingredient = ingredientItem.text
         ingredientListAry.append(ingredient)
     recipeCard['ingredients'] = ingredientListAry
-
-    # # Find percentage match
-    # percentMatch = calc_relevance(searchAry, ingredientListAry)
-    # recipeCard['percentMatch'] = percentMatch
 
     # Find Instructions
     instructionsAry = []
