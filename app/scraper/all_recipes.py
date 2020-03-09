@@ -3,11 +3,6 @@ from bs4 import BeautifulSoup  # Web scraping
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
 
-from .relevance_index import calc_relevance
-import pprint  # Pretty Print to make things print neatly
-import time
-
-
 def get_recipe_list(recipeUrl):
     # Opening the connection grabbing webpage, store all raw information
     uClient = urlReq(recipeUrl)
@@ -104,10 +99,6 @@ def get_all_recipe(recipeUrl):
             ingredientListAry.append(ingredient)
     recipeCard['ingredients'] = ingredientListAry
 
-    # Calculate percentage match
-    # percent_match = calc_relevance(searchAry, ingredient)
-    # recipeCard['percentMatch'] = percent_match
-
     # Find Instructions
     instructionsAry = []
     instructionsContainer = soup.findAll("li", {"class": "subcontainer instructions-section-item"})
@@ -129,7 +120,7 @@ def get_all_recipe(recipeUrl):
 def allrecipe_search(ingredients):
     recipeDict = {}
     # Search a list of recipes on all recipe.com
-    searchUrl = "https://www.allrecipes.com/search/results/?ingincl=" + ingredients + "&sort=re"
+    searchUrl = "https://www.allrecipes.com/search/results/?wt=" + ingredients + "&sort=re"
     recipeUrlList = urlReq(searchUrl)
     htmlRaw = recipeUrlList.read()
     recipeUrlList.close()

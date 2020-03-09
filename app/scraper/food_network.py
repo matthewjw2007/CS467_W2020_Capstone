@@ -3,12 +3,6 @@ from bs4 import BeautifulSoup  # Web scraping
 from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures  # Thread pool
 
-from .relevance_index import calc_relevance
-
-import time  # timing the amount of time required to search
-import pprint  # Pretty Print to make things print neatly
-
-
 def getRecipeList(recipeUrl):
     # Opening the connection grabing webpage, store all raw information
     uClient = urlReq(recipeUrl)
@@ -17,7 +11,6 @@ def getRecipeList(recipeUrl):
 
     # Parse raw HTML
     soup = BeautifulSoup(htmlRaw, "html.parser")
-
     recipeCard = {}
 
     # Store URL into recipe card
@@ -32,10 +25,11 @@ def getRecipeList(recipeUrl):
     recipeCard['stars'] = recipe_stars
 
     # Find image URL store into recipe card.
-    imageContainer = soup.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
+    recipeHeader = soup.find("div", {"class", "recipe-lead"})
+    imageContainer = recipeHeader.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
     if imageContainer:
         imageUrl = imageContainer['src']
-        recipeCard['image'] = imageUrl
+        recipeCard['image'] = "http:" + imageUrl
     else:
         recipeCard['image'] = ""
 
@@ -84,15 +78,13 @@ def get_foodnetwork(recipeUrl):
     recipeCard['title'] = recipeTitle
 
     # Find image URL store into recipe card.
-    imageContainer = soup.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
-    imageUrl = imageContainer['src']
-    recipeCard['image'] = imageUrl
-
-    # if imageContainer:
-    #     imageUrl = imageContainer['src']
-    #     recipeCard['image'] = imageUrl
-    # else:
-    #     recipeCard['image'] = ""
+    recipeHeader = soup.find("div", {"class", "recipe-lead"})
+    imageContainer = recipeHeader.find("img", {"class", "m-MediaBlock__a-Image a-Image"})
+    if imageContainer:
+        imageUrl = imageContainer['src']
+        recipeCard['image'] = "http:" + imageUrl
+    else:
+        recipeCard['image'] = ""
 
     # Find metadata of the recipe
     metadataAry = []
@@ -111,10 +103,6 @@ def get_foodnetwork(recipeUrl):
         ingredientListAry.append(ingredient)
     recipeCard['ingredients'] = ingredientListAry
 
-    # # Find percentage match
-    # percentMatch = calc_relevance(searchAry, ingredientListAry)
-    # recipeCard['percentMatch'] = percentMatch
-
     # Find Instructions
     instructionsAry = []
     instructionsContainer = soup.findAll("li", {"class": "o-Method__m-Step"})
@@ -132,8 +120,7 @@ def food_network_search(ingredients):
     # Get a list of recipe URLs from main search page
     recipeUrlList = []
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        results = [executor.submit(getUrls, ingredients, page) for page in
-                    range(1,3)]  ##### Number of pages to search
+        results = [executor.submit(getUrls, ingredients, page) for page in range(1,3)]
         for f in concurrent.futures.as_completed(results):
             recipeUrlList = recipeUrlList + f.result()
 
