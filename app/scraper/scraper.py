@@ -1,9 +1,5 @@
-import sys
-from bs4 import BeautifulSoup # Web scraping 
-from urllib.request import urlopen as urlReq  # Open URLs
 import concurrent.futures # Thread pool
-import pprint # Pretty Print to make things print neatly
-import time
+
 
 from .all_recipes import allrecipe_search  # importing search function from all_recipes.py
 from .food_network import food_network_search
