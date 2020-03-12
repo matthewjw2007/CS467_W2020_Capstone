@@ -6,3 +6,4 @@ app/.DS_Store
 .DS_Store
 app.db
 migrations
+dump.rdb
