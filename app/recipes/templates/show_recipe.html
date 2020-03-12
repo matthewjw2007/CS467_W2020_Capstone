@@ -7,7 +7,11 @@
         <h5>
             <a target="_blank" href="{{payload.URL}}">Link to Source Website</a>
         </h5>
-        <button type="button" class="save-recipe-button" data-title="{{ payload.title }}" data-url="{{ payload.URL }}">Save Recipe</button>
+        {% if current_user.is_anonymous %}
+            <p></p>
+            {% else %}
+            <button type="button" class="save-recipe-button" data-title="{{ payload.title }}" data-url="{{ payload.URL }}">Save Recipe</button>
+            {% endif %}
         <div id="results-div">
             <img id="show-recipe-img" src="{{payload.image}}" width="500" height="500">
         </div>
