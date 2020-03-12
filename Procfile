@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn CS467_Capstone:app
+web: flask db upgrade; gunicorn __init__:app
