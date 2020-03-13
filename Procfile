@@ -1,1 +1,1 @@
-web: flask db migrate; flask db upgrade; gunicorn main:app
+web: flask db upgrade; gunicorn main:app
