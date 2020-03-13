@@ -11,7 +11,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True, unique=True, nullable=False)
     email_addr = db.Column(db.String(128), index=True, unique=True, nullable=False)
-    password = db.Column(db.String(280))
+    password = db.Column(db.String(256))
     last_seen = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     two_factor = db.Column(db.Boolean, default=False)
     secret = db.Column(db.String(128))
