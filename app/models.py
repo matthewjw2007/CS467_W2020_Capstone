@@ -14,7 +14,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(64))
     last_seen = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     two_factor = db.Column(db.Boolean, default=False)
-    secret = db.Column(db.String(64))
+    secret = db.Column(db.String(280))
     num_searches = db.Column(db.Integer, default=0)
     most_recent_search = db.Column(db.Integer, default=0)
     search_id_1 = db.Column(db.String(128))
