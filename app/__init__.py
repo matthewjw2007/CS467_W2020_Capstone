@@ -6,7 +6,6 @@ from flask_login import LoginManager
 # Imports for database use
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_wtf import FlaskForm
 from redis import Redis
 import rq
 
